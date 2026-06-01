@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\background.png",
+      "PackagePath": "staticwebassets\\background.png"
+    },
+    {
+      "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\css\\dllteste-login.css",
+      "PackagePath": "staticwebassets\\css\\dllteste-login.css"
+    },
+    {
+      "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\css\\dllteste-menu.css",
+      "PackagePath": "staticwebassets\\css\\dllteste-menu.css"
+    },
+    {
+      "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\exampleJsInterop.js",
+      "PackagePath": "staticwebassets\\exampleJsInterop.js"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.DllTeste.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.DllTeste.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.DllTeste.props",
+      "PackagePath": "build\\DllTeste.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.DllTeste.props",
+      "PackagePath": "buildMultiTargeting\\DllTeste.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.DllTeste.props",
+      "PackagePath": "buildTransitive\\DllTeste.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

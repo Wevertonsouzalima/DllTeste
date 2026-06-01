@@ -1,0 +1,238 @@
+/* ==========================================================================
+   Tela de login — tema controlado por classe (igual ao MenuSistema):
+     .dll-login-tema-claro  / .dll-login-tema-escuro
+   ========================================================================== */
+
+.dll-login {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---- Tema claro (fallback) ---- */
+.dll-login.dll-login-tema-claro {
+    --login-bg-1: #eef2f7;
+    --login-bg-2: #e2e8f0;
+    --login-card: #ffffff;
+    --login-card-borda: #e2e8f0;
+    --login-input-bg: #ffffff;
+    --login-input-borda: #cbd5e1;
+    --login-input-borda-foco: #2563eb;
+    --login-texto: #0f172a;
+    --login-texto-suave: #64748b;
+    --login-icone: #94a3b8;
+    --login-primaria: #2563eb;
+    --login-primaria-hover: #1d4ed8;
+    --login-primaria-texto: #ffffff;
+    --login-erro-bg: #fef2f2;
+    --login-erro-borda: #fecaca;
+    --login-erro-texto: #b91c1c;
+    --login-sombra: 0 10px 30px rgba(15, 23, 42, .10);
+}
+
+/* ---- Tema escuro (paleta do app) ---- */
+.dll-login.dll-login-tema-escuro {
+    --login-bg-1: #0e1730;
+    --login-bg-2: #0b1120;
+    --login-card: #0f172a;
+    --login-card-borda: #1e293b;
+    --login-input-bg: #0b1225;
+    --login-input-borda: #334155;
+    --login-input-borda-foco: #3b82f6;
+    --login-texto: #e2e8f0;
+    --login-texto-suave: #94a3b8;
+    --login-icone: #64748b;
+    --login-primaria: #3b82f6;
+    --login-primaria-hover: #2563eb;
+    --login-primaria-texto: #ffffff;
+    --login-erro-bg: rgba(239, 68, 68, .12);
+    --login-erro-borda: rgba(239, 68, 68, .40);
+    --login-erro-texto: #fca5a5;
+    --login-sombra: 0 14px 40px rgba(0, 0, 0, .50);
+}
+
+.dll-login {
+    background: radial-gradient(1200px 600px at 50% -10%, var(--login-bg-1), var(--login-bg-2));
+}
+
+/* ---- Card ---- */
+.dll-login-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--login-card);
+    border: 1px solid var(--login-card-borda);
+    border-radius: 16px;
+    box-shadow: var(--login-sombra);
+    padding: 32px;
+    box-sizing: border-box;
+    color: var(--login-texto);
+}
+
+.dll-login-logo {
+    display: block;
+    max-height: 56px;
+    margin: 0 auto 20px;
+}
+
+.dll-login-titulo {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--login-texto);
+}
+
+.dll-login-subtitulo {
+    margin: 6px 0 0;
+    text-align: center;
+    font-size: .9rem;
+    color: var(--login-texto-suave);
+}
+
+/* ---- Erro ---- */
+.dll-login-erro {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: .875rem;
+    background: var(--login-erro-bg);
+    border: 1px solid var(--login-erro-borda);
+    color: var(--login-erro-texto);
+}
+
+/* ---- Formulário ---- */
+.dll-login-form {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.dll-login-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dll-login-label {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--login-texto-suave);
+}
+
+.dll-login-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dll-login-icone {
+    position: absolute;
+    left: 14px;
+    font-size: .95rem;
+    color: var(--login-icone);
+    pointer-events: none;
+}
+
+.dll-login-input-wrap input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px 12px 40px;
+    font-size: .95rem;
+    color: var(--login-texto);
+    background: var(--login-input-bg);
+    border: 1px solid var(--login-input-borda);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.dll-login-input-wrap input::placeholder {
+    color: var(--login-icone);
+}
+
+.dll-login-input-wrap input:focus {
+    border-color: var(--login-input-borda-foco);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, .20);
+}
+
+.dll-login-toggle {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--login-icone);
+    border-radius: 8px;
+}
+
+.dll-login-toggle:hover {
+    color: var(--login-texto);
+}
+
+/* ---- Lembrar-me ---- */
+.dll-login-lembrar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .875rem;
+    color: var(--login-texto-suave);
+    cursor: pointer;
+    user-select: none;
+}
+
+.dll-login-lembrar input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--login-primaria);
+    cursor: pointer;
+}
+
+/* ---- Botão ---- */
+.dll-login-botao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 12px 16px;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--login-primaria-texto);
+    background: var(--login-primaria);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s, transform .05s;
+}
+
+.dll-login-botao:hover {
+    background: var(--login-primaria-hover);
+}
+
+.dll-login-botao:active {
+    transform: translateY(1px);
+}
+
+/* ---- Responsivo (celular) ---- */
+@media (max-width: 480px) {
+    .dll-login {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .dll-login-card {
+        padding: 24px 20px;
+        margin-top: 8vh;
+        border-radius: 14px;
+    }
+}

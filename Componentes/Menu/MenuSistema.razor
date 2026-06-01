@@ -1,0 +1,387 @@
+﻿@namespace DllTeste.Componentes.Menu
+
+@using DllTeste.Banco.SistemaPaginas.Models
+@using DllTeste.Banco.SistemaPaginas.Services
+@using DllTeste.Componentes.Menu.Enums
+@using DllTeste.Componentes.Menu.Models
+@using Microsoft.Extensions.Options
+
+@inject SistemaPaginasService SistemaPaginasService
+@inject IOptions<SistemaAplicacaoOptions> SistemaOptions
+
+@if (Posicao == MenuSistemaPosicao.Superior)
+{
+    <header class="@ClasseMenu">
+        <div class="dll-menu-superior-brand">
+            <span class="dll-menu-superior-title">@TituloFinal</span>
+        </div>
+
+        <nav class="dll-menu-superior-nav">
+            @RenderConteudoMenu(modoSuperior: true)
+        </nav>
+
+        <div class="dll-menu-superior-actions">
+            @if (PermitirTrocaTema)
+            {
+                <button type="button"
+                        class="dll-menu-action-button"
+                        title="@TituloBotaoTema"
+                        @onclick="AlternarTemaAsync">
+                    <i class="@IconeTema"></i>
+                </button>
+            }
+
+            @if (ExibirAreaUsuario)
+            {
+                @RenderUsuarioCompacto()
+            }
+
+            @if (ExibirAreaUsuario && OnLogout.HasDelegate)
+            {
+                <button type="button"
+                        class="dll-menu-action-button dll-menu-logout-button"
+                        title="Sair"
+                        @onclick="LogoutAsync">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            }
+        </div>
+    </header>
+}
+else
+{
+    <aside class="@ClasseMenu">
+        <div class="dll-menu-header">
+            @if (!_recolhido)
+            {
+                <div class="dll-menu-brand">
+                    <span class="dll-menu-brand-title">@TituloFinal</span>
+                </div>
+            }
+
+            @if (PermitirRecolher)
+            {
+                <button type="button"
+                        class="dll-menu-collapse-button"
+                        title="@(_recolhido ? "Expandir menu" : "Recolher menu")"
+                        @onclick="AlternarRecolhido">
+                    <i class="@(_recolhido ? "bi bi-chevron-right" : "bi bi-chevron-left")"></i>
+                </button>
+            }
+        </div>
+
+        <div class="dll-menu-body">
+            @RenderConteudoMenu(modoSuperior: false)
+        </div>
+
+        <div class="dll-menu-footer">
+            @if (PermitirTrocaTema)
+            {
+                <button type="button"
+                        class="dll-menu-footer-action"
+                        title="@TituloBotaoTema"
+                        @onclick="AlternarTemaAsync">
+                    <i class="@IconeTema"></i>
+
+                    @if (!_recolhido)
+                    {
+                        <span>@TextoTema</span>
+                    }
+                </button>
+            }
+
+            @if (ExibirAreaUsuario)
+            {
+                <div class="dll-menu-user-area">
+                    @RenderAvatar()
+
+                    @if (!_recolhido)
+                    {
+                        <div class="dll-menu-user-info">
+                            <span class="dll-menu-user-name">@UsuarioFinal.Nome</span>
+
+                            @if (!string.IsNullOrWhiteSpace(UsuarioFinal.TextoSecundario))
+                            {
+                                <span class="dll-menu-user-secondary">@UsuarioFinal.TextoSecundario</span>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (ExibirAreaUsuario && OnLogout.HasDelegate)
+            {
+                <button type="button"
+                        class="dll-menu-footer-action dll-menu-logout-button"
+                        title="Sair"
+                        @onclick="LogoutAsync">
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    @if (!_recolhido)
+                    {
+                        <span>Sair</span>
+                    }
+                </button>
+            }
+        </div>
+    </aside>
+}
+
+@code {
+    [Parameter]
+    public string? NomeSistema { get; set; }
+
+    [Parameter]
+    public string? TituloSistema { get; set; }
+
+    [Parameter]
+    public MenuSistemaPosicao Posicao { get; set; } = MenuSistemaPosicao.Lateral;
+
+    [Parameter]
+    public TemaSistema Tema { get; set; } = TemaSistema.Escuro;
+
+    [Parameter]
+    public EventCallback<TemaSistema> TemaChanged { get; set; }
+
+    [Parameter]
+    public bool PermitirTrocaTema { get; set; } = true;
+
+    [Parameter]
+    public bool PermitirRecolher { get; set; } = true;
+
+    [Parameter]
+    public bool RecolhidoInicial { get; set; }
+
+    [Parameter]
+    public bool ExibirAreaUsuario { get; set; } = true;
+
+    [Parameter]
+    public MenuUsuarioInfo? Usuario { get; set; }
+
+    [Parameter]
+    public EventCallback OnLogout { get; set; }
+
+    private List<SistemaPaginaMenuItem> _itens = new();
+    private bool _carregando = true;
+    private bool _recolhido;
+    private string? _erro;
+    private TemaSistema _temaAtual;
+
+    private string TituloFinal =>
+        !string.IsNullOrWhiteSpace(TituloSistema)
+            ? TituloSistema!
+            : (!string.IsNullOrWhiteSpace(SistemaOptions.Value.Nome)
+                ? SistemaOptions.Value.Nome
+                : "Sistema");
+
+    private MenuUsuarioInfo UsuarioFinal =>
+        Usuario ?? new MenuUsuarioInfo
+        {
+            Nome = "Usuário",
+            TextoSecundario = "Não autenticado",
+            Iniciais = "U"
+        };
+
+    private string ClasseMenu
+    {
+        get
+        {
+            var posicao = Posicao == MenuSistemaPosicao.Superior
+                ? "dll-menu-superior"
+                : "dll-menu-lateral";
+
+            var tema = _temaAtual == TemaSistema.Escuro
+                ? "dll-menu-tema-escuro"
+                : "dll-menu-tema-claro";
+
+            var recolhido = _recolhido && Posicao == MenuSistemaPosicao.Lateral
+                ? "dll-menu-recolhido"
+                : "dll-menu-expandido";
+
+            return $"dll-menu-sistema {posicao} {tema} {recolhido}";
+        }
+    }
+
+    private string IconeTema =>
+        _temaAtual == TemaSistema.Escuro
+            ? "bi bi-sun"
+            : "bi bi-moon-stars";
+
+    private string TextoTema =>
+        _temaAtual == TemaSistema.Escuro
+            ? "Tema claro"
+            : "Tema escuro";
+
+    private string TituloBotaoTema =>
+        _temaAtual == TemaSistema.Escuro
+            ? "Alternar para tema claro"
+            : "Alternar para tema escuro";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _temaAtual = Tema;
+        _recolhido = RecolhidoInicial;
+
+        await CarregarMenuAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        _temaAtual = Tema;
+    }
+
+    private async Task CarregarMenuAsync()
+    {
+        try
+        {
+            _carregando = true;
+            _erro = null;
+
+            var nomeSistema = !string.IsNullOrWhiteSpace(NomeSistema)
+                ? NomeSistema
+                : SistemaOptions.Value.Nome;
+
+            if (string.IsNullOrWhiteSpace(nomeSistema))
+            {
+                _erro = "Nome do sistema não configurado.";
+                return;
+            }
+
+            _itens = await SistemaPaginasService.CarregarMenuAsync(nomeSistema);
+        }
+        catch (Exception ex)
+        {
+            _erro = ex.InnerException?.Message ?? ex.Message;
+        }
+        finally
+        {
+            _carregando = false;
+        }
+    }
+
+    private void AlternarRecolhido()
+    {
+        _recolhido = !_recolhido;
+    }
+
+    private async Task AlternarTemaAsync()
+    {
+        _temaAtual = _temaAtual == TemaSistema.Escuro
+            ? TemaSistema.Claro
+            : TemaSistema.Escuro;
+
+        if (TemaChanged.HasDelegate)
+            await TemaChanged.InvokeAsync(_temaAtual);
+    }
+
+    private async Task LogoutAsync()
+    {
+        if (OnLogout.HasDelegate)
+            await OnLogout.InvokeAsync();
+    }
+
+    private RenderFragment RenderConteudoMenu(bool modoSuperior) => builder =>
+    {
+        var sequence = 0;
+
+        if (_carregando)
+        {
+            builder.OpenElement(sequence++, "div");
+            builder.AddAttribute(sequence++, "class", "dll-menu-loading");
+            builder.AddContent(sequence++, "Carregando menu...");
+            builder.CloseElement();
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(_erro))
+        {
+            builder.OpenElement(sequence++, "div");
+            builder.AddAttribute(sequence++, "class", "dll-menu-erro");
+            builder.AddContent(sequence++, _erro);
+            builder.CloseElement();
+            return;
+        }
+
+        if (_itens.Count == 0)
+        {
+            builder.OpenElement(sequence++, "div");
+            builder.AddAttribute(sequence++, "class", "dll-menu-vazio");
+            builder.AddContent(sequence++, "Nenhum menu cadastrado.");
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(sequence++, "ul");
+        builder.AddAttribute(
+            sequence++,
+            "class",
+            modoSuperior ? "dll-menu-lista-superior" : "dll-menu-lista");
+
+        foreach (var item in _itens)
+        {
+            builder.OpenComponent<MenuSistemaItem>(sequence++);
+            builder.AddAttribute(sequence++, "Item", item);
+            builder.AddAttribute(sequence++, "Recolhido", _recolhido && !modoSuperior);
+            builder.AddAttribute(sequence++, "ModoSuperior", modoSuperior);
+            builder.AddAttribute(sequence++, "Nivel", 0);
+            builder.CloseComponent();
+        }
+
+        builder.CloseElement();
+    };
+
+    private RenderFragment RenderAvatar() => builder =>
+    {
+        var sequence = 0;
+
+        if (!string.IsNullOrWhiteSpace(UsuarioFinal.UrlFoto))
+        {
+            builder.OpenElement(sequence++, "img");
+            builder.AddAttribute(sequence++, "class", "dll-menu-user-avatar");
+            builder.AddAttribute(sequence++, "src", UsuarioFinal.UrlFoto);
+            builder.AddAttribute(sequence++, "alt", UsuarioFinal.Nome);
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(sequence++, "div");
+        builder.AddAttribute(sequence++, "class", "dll-menu-user-avatar dll-menu-user-avatar-fallback");
+        builder.AddContent(sequence++, ObterIniciaisUsuario());
+        builder.CloseElement();
+    };
+
+    private RenderFragment RenderUsuarioCompacto() => builder =>
+    {
+        var sequence = 0;
+
+        builder.OpenElement(sequence++, "div");
+        builder.AddAttribute(sequence++, "class", "dll-menu-superior-user");
+        builder.AddAttribute(sequence++, "title", UsuarioFinal.Nome);
+
+        builder.AddContent(sequence++, RenderAvatar());
+
+        builder.OpenElement(sequence++, "span");
+        builder.AddAttribute(sequence++, "class", "dll-menu-superior-user-name");
+        builder.AddContent(sequence++, UsuarioFinal.Nome);
+        builder.CloseElement();
+
+        builder.CloseElement();
+    };
+
+    private string ObterIniciaisUsuario()
+    {
+        if (!string.IsNullOrWhiteSpace(UsuarioFinal.Iniciais))
+            return UsuarioFinal.Iniciais.Trim().ToUpperInvariant();
+
+        var partes = UsuarioFinal.Nome
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (partes.Length == 0)
+            return "U";
+
+        if (partes.Length == 1)
+            return partes[0][0].ToString().ToUpperInvariant();
+
+        return $"{partes[0][0]}{partes[^1][0]}".ToUpperInvariant();
+    }
+}
