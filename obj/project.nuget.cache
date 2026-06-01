@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "dgSpecHash": "TdzAgQHGeEI=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.3.10\\microsoft.aspnetcore.antiforgery.2.3.10.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.3.10\\microsoft.aspnetcore.authentication.2.3.10.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.3.10\\microsoft.aspnetcore.authentication.cookies.2.3.10.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.aspnetcore.components.web\\9.0.11\\microsoft.aspnetcore.components.web.9.0.11.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.bcl.cryptography\\9.0.13\\microsoft.bcl.cryptography.9.0.13.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.data.sqlclient\\7.0.1\\microsoft.data.sqlclient.7.0.1.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.data.sqlclient.extensions.abstractions\\1.0.0\\microsoft.data.sqlclient.extensions.abstractions.1.0.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.data.sqlclient.internal.logging\\1.0.0\\microsoft.data.sqlclient.internal.logging.1.0.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\6.0.2\\microsoft.data.sqlclient.sni.runtime.6.0.2.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.11\\microsoft.entityframeworkcore.9.0.11.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.11\\microsoft.entityframeworkcore.abstractions.9.0.11.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.11\\microsoft.entityframeworkcore.analyzers.9.0.11.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.16.0\\microsoft.identitymodel.abstractions.8.16.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.16.0\\microsoft.identitymodel.jsonwebtokens.8.16.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.identitymodel.logging\\8.16.0\\microsoft.identitymodel.logging.8.16.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.identitymodel.protocols\\8.16.0\\microsoft.identitymodel.protocols.8.16.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\8.16.0\\microsoft.identitymodel.protocols.openidconnect.8.16.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.16.0\\microsoft.identitymodel.tokens.8.16.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.13\\system.configuration.configurationmanager.9.0.13.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.16.0\\system.identitymodel.tokens.jwt.8.16.0.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.13\\system.security.cryptography.pkcs.9.0.13.nupkg.sha512",
+    "C:\\Users\\Weverton\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.13\\system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "A Microsoft.AspNetCore.Antiforgery PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
+      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "A Microsoft.AspNetCore.Authentication PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
+      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "A Microsoft.AspNetCore.Authentication.Cookies PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
+      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "A Microsoft.AspNetCore.Components.Web PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
+      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

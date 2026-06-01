@@ -1,0 +1,346 @@
+﻿@namespace DllTeste.Componentes.Menu
+
+@using DllTeste.Banco.SistemaPaginas.Enums
+@using DllTeste.Banco.SistemaPaginas.Models
+@using Microsoft.AspNetCore.Components.Rendering
+@using Microsoft.AspNetCore.Components.Routing
+
+@if (Item.Pagina.EhSeparador)
+{
+    <li class="dll-menu-separador"></li>
+}
+else if (ModoSuperior)
+{
+    @RenderModoSuperior()
+}
+else if (Recolhido)
+{
+    @RenderModoLateralRecolhido()
+}
+else
+{
+    @RenderModoLateralExpandido()
+}
+
+@code {
+    [Parameter]
+    public SistemaPaginaMenuItem Item { get; set; } = new();
+
+    [Parameter]
+    public bool Recolhido { get; set; }
+
+    [Parameter]
+    public bool ModoSuperior { get; set; }
+
+    [Parameter]
+    public int Nivel { get; set; }
+
+    private bool TemFilhos => Item.TemFilhos;
+    private SistemaPagina Pagina => Item.Pagina;
+
+    private RenderFragment RenderModoLateralExpandido() => builder =>
+    {
+        var sequence = 0;
+
+        if (Pagina.EhGrupo || TemFilhos)
+        {
+            builder.OpenElement(sequence++, "li");
+            builder.AddAttribute(sequence++, "class", "dll-menu-item dll-menu-grupo");
+
+            builder.OpenElement(sequence++, "details");
+            builder.AddAttribute(sequence++, "open", true);
+
+            builder.OpenElement(sequence++, "summary");
+            builder.AddAttribute(sequence++, "class", "dll-menu-grupo-summary");
+            builder.AddAttribute(sequence++, "title", ObterTooltip());
+
+            AdicionarIconeOuFallback(builder, ref sequence);
+
+            builder.OpenElement(sequence++, "span");
+            builder.AddAttribute(sequence++, "class", "dll-menu-texto");
+            builder.AddContent(sequence++, Pagina.Titulo);
+            builder.CloseElement();
+
+            AdicionarStatus(builder, ref sequence, compacto: false);
+
+            builder.CloseElement();
+
+            builder.OpenElement(sequence++, "ul");
+            builder.AddAttribute(sequence++, "class", "dll-menu-sublista");
+
+            foreach (var filho in Item.Filhos)
+            {
+                builder.OpenComponent<MenuSistemaItem>(sequence++);
+                builder.AddAttribute(sequence++, "Item", filho);
+                builder.AddAttribute(sequence++, "Recolhido", false);
+                builder.AddAttribute(sequence++, "ModoSuperior", false);
+                builder.AddAttribute(sequence++, "Nivel", Nivel + 1);
+                builder.CloseComponent();
+            }
+
+            builder.CloseElement();
+
+            builder.CloseElement();
+            builder.CloseElement();
+
+            return;
+        }
+
+        builder.OpenElement(sequence++, "li");
+        builder.AddAttribute(sequence++, "class", "dll-menu-item");
+
+        AdicionarLink(builder, ref sequence, classe: "dll-menu-link", compacto: false);
+
+        builder.CloseElement();
+    };
+
+    private RenderFragment RenderModoLateralRecolhido() => builder =>
+    {
+        var sequence = 0;
+
+        builder.OpenElement(sequence++, "li");
+        builder.AddAttribute(
+            sequence++,
+            "class",
+            TemFilhos || Pagina.EhGrupo
+                ? "dll-menu-item dll-menu-item-recolhido dll-menu-has-flyout"
+                : "dll-menu-item dll-menu-item-recolhido");
+
+        if (TemFilhos || Pagina.EhGrupo)
+        {
+            builder.OpenElement(sequence++, "button");
+            builder.AddAttribute(sequence++, "type", "button");
+            builder.AddAttribute(sequence++, "class", "dll-menu-icon-button");
+            builder.AddAttribute(sequence++, "title", ObterTooltip());
+
+            AdicionarIconeOuFallback(builder, ref sequence);
+            AdicionarStatus(builder, ref sequence, compacto: true);
+
+            builder.CloseElement();
+
+            builder.OpenElement(sequence++, "div");
+            builder.AddAttribute(sequence++, "class", "dll-menu-flyout");
+
+            builder.OpenElement(sequence++, "div");
+            builder.AddAttribute(sequence++, "class", "dll-menu-flyout-title");
+            builder.AddContent(sequence++, Pagina.Titulo);
+            builder.CloseElement();
+
+            builder.OpenElement(sequence++, "ul");
+            builder.AddAttribute(sequence++, "class", "dll-menu-flyout-lista");
+
+            foreach (var filho in Item.Filhos)
+            {
+                builder.OpenComponent<MenuSistemaItem>(sequence++);
+                builder.AddAttribute(sequence++, "Item", filho);
+                builder.AddAttribute(sequence++, "Recolhido", false);
+                builder.AddAttribute(sequence++, "ModoSuperior", false);
+                builder.AddAttribute(sequence++, "Nivel", Nivel + 1);
+                builder.CloseComponent();
+            }
+
+            builder.CloseElement();
+            builder.CloseElement();
+        }
+        else
+        {
+            AdicionarLink(builder, ref sequence, classe: "dll-menu-icon-link", compacto: true);
+        }
+
+        builder.CloseElement();
+    };
+
+    private RenderFragment RenderModoSuperior() => builder =>
+    {
+        var sequence = 0;
+
+        if (Pagina.EhGrupo || TemFilhos)
+        {
+            builder.OpenElement(sequence++, "li");
+            builder.AddAttribute(sequence++, "class", "dll-menu-superior-item dll-menu-superior-grupo");
+
+            builder.OpenElement(sequence++, "button");
+            builder.AddAttribute(sequence++, "type", "button");
+            builder.AddAttribute(sequence++, "class", "dll-menu-superior-link");
+            builder.AddAttribute(sequence++, "title", ObterTooltip());
+
+            AdicionarIconeOuFallback(builder, ref sequence);
+
+            builder.OpenElement(sequence++, "span");
+            builder.AddAttribute(sequence++, "class", "dll-menu-texto");
+            builder.AddContent(sequence++, Pagina.Titulo);
+            builder.CloseElement();
+
+            builder.OpenElement(sequence++, "i");
+            builder.AddAttribute(sequence++, "class", "bi bi-chevron-down dll-menu-superior-caret");
+            builder.CloseElement();
+
+            AdicionarStatus(builder, ref sequence, compacto: false);
+
+            builder.CloseElement();
+
+            builder.OpenElement(sequence++, "ul");
+            builder.AddAttribute(sequence++, "class", "dll-menu-superior-dropdown");
+
+            foreach (var filho in Item.Filhos)
+            {
+                builder.OpenComponent<MenuSistemaItem>(sequence++);
+                builder.AddAttribute(sequence++, "Item", filho);
+                builder.AddAttribute(sequence++, "Recolhido", false);
+                builder.AddAttribute(sequence++, "ModoSuperior", false);
+                builder.AddAttribute(sequence++, "Nivel", Nivel + 1);
+                builder.CloseComponent();
+            }
+
+            builder.CloseElement();
+
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(sequence++, "li");
+        builder.AddAttribute(sequence++, "class", "dll-menu-superior-item");
+
+        AdicionarLink(builder, ref sequence, classe: "dll-menu-superior-link", compacto: false);
+
+        builder.CloseElement();
+    };
+
+    private void AdicionarLink(
+        RenderTreeBuilder builder,
+        ref int sequence,
+        string classe,
+        bool compacto)
+    {
+        if (Pagina.EhLinkExterno || Pagina.AbrirNovaAba)
+        {
+            builder.OpenElement(sequence++, "a");
+            builder.AddAttribute(sequence++, "href", ObterRota());
+            builder.AddAttribute(sequence++, "target", "_blank");
+            builder.AddAttribute(sequence++, "rel", "noopener noreferrer");
+            builder.AddAttribute(sequence++, "title", ObterTooltip());
+            builder.AddAttribute(sequence++, "class", classe);
+
+            AdicionarConteudoLink(builder, ref sequence, compacto);
+
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenComponent<NavLink>(sequence++);
+        builder.AddAttribute(sequence++, "href", ObterRota());
+        builder.AddAttribute(sequence++, "title", ObterTooltip());
+        builder.AddAttribute(sequence++, "class", classe);
+        builder.AddAttribute(sequence++, "Match", ObterNavLinkMatch());
+        builder.AddAttribute(sequence++, "ChildContent", (RenderFragment)(childBuilder =>
+        {
+            var childSequence = 0;
+            AdicionarConteudoLink(childBuilder, ref childSequence, compacto);
+        }));
+        builder.CloseComponent();
+    }
+
+    private void AdicionarConteudoLink(
+        RenderTreeBuilder builder,
+        ref int sequence,
+        bool compacto)
+    {
+        AdicionarIconeOuFallback(builder, ref sequence);
+
+        if (!compacto)
+        {
+            builder.OpenElement(sequence++, "span");
+            builder.AddAttribute(sequence++, "class", "dll-menu-texto");
+            builder.AddContent(sequence++, Pagina.Titulo);
+            builder.CloseElement();
+        }
+
+        AdicionarStatus(builder, ref sequence, compacto);
+    }
+
+    private void AdicionarIconeOuFallback(
+        RenderTreeBuilder builder,
+        ref int sequence)
+    {
+        if (!string.IsNullOrWhiteSpace(Pagina.Icone))
+        {
+            builder.OpenElement(sequence++, "i");
+            builder.AddAttribute(sequence++, "class", Pagina.Icone);
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(sequence++, "span");
+        builder.AddAttribute(sequence++, "class", "dll-menu-fallback-icon");
+        builder.AddContent(sequence++, ObterLetraFallback());
+        builder.CloseElement();
+    }
+
+    private void AdicionarStatus(
+        RenderTreeBuilder builder,
+        ref int sequence,
+        bool compacto)
+    {
+        if (Pagina.EstaEmManutencao)
+        {
+            if (compacto)
+            {
+                builder.OpenElement(sequence++, "span");
+                builder.AddAttribute(sequence++, "class", "dll-menu-status-dot dll-menu-status-dot-manutencao");
+                builder.CloseElement();
+                return;
+            }
+
+            builder.OpenElement(sequence++, "small");
+            builder.AddAttribute(sequence++, "class", "dll-menu-status dll-menu-status-manutencao");
+            builder.AddContent(sequence++, "Manutenção");
+            builder.CloseElement();
+            return;
+        }
+
+        if (Pagina.EstaInativa)
+        {
+            if (compacto)
+            {
+                builder.OpenElement(sequence++, "span");
+                builder.AddAttribute(sequence++, "class", "dll-menu-status-dot dll-menu-status-dot-inativa");
+                builder.CloseElement();
+                return;
+            }
+
+            builder.OpenElement(sequence++, "small");
+            builder.AddAttribute(sequence++, "class", "dll-menu-status dll-menu-status-inativa");
+            builder.AddContent(sequence++, "Inativa");
+            builder.CloseElement();
+        }
+    }
+
+    private string ObterTooltip()
+    {
+        return !string.IsNullOrWhiteSpace(Pagina.Tooltip)
+            ? Pagina.Tooltip!
+            : Pagina.Titulo;
+    }
+
+    private string ObterRota()
+    {
+        return string.IsNullOrWhiteSpace(Pagina.Rota)
+            ? "#"
+            : Pagina.Rota;
+    }
+
+    private NavLinkMatch ObterNavLinkMatch()
+    {
+        return ObterRota() == "/"
+            ? NavLinkMatch.All
+            : NavLinkMatch.Prefix;
+    }
+
+    private string ObterLetraFallback()
+    {
+        if (string.IsNullOrWhiteSpace(Pagina.Titulo))
+            return "?";
+
+        return Pagina.Titulo.Trim()[0].ToString().ToUpperInvariant();
+    }
+}
