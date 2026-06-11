@@ -1,0 +1,129 @@
+@namespace DllTeste.Componentes.Dados
+@using System.Globalization
+
+<div class="pd-data @(Desabilitado ? "pd-data--desabilitado" : null) @Class">
+    @if (!string.IsNullOrWhiteSpace(Rotulo))
+    {
+        <label class="pd-data__rotulo" for="@_id">@Rotulo</label>
+    }
+
+    <div class="pd-data__campo">
+        <i class="bi @IconeTipo pd-data__icone" aria-hidden="true"></i>
+        <input id="@_id"
+               type="@Tipo"
+               class="pd-data__input"
+               value="@ValorString"
+               min="@FormatarLimite(Min)"
+               max="@FormatarLimite(Max)"
+               disabled="@Desabilitado"
+               @onchange="AoMudar"
+               @attributes="AtributosExtras" />
+    </div>
+</div>
+
+@code {
+    private readonly string _id = $"pd-data-{Guid.NewGuid():N}";
+
+    /// <summary>Valor selecionado. Use com @bind-Valor.</summary>
+    [Parameter] public DateTime? Valor { get; set; }
+
+    /// <summary>Notifica mudança de Valor.</summary>
+    [Parameter] public EventCallback<DateTime?> ValorChanged { get; set; }
+
+    /// <summary>Tipo do input: "date" (padrão), "datetime-local", "time" ou "month".</summary>
+    [Parameter] public string Tipo { get; set; } = "date";
+
+    /// <summary>Rótulo opcional.</summary>
+    [Parameter] public string? Rotulo { get; set; }
+
+    /// <summary>Data mínima permitida.</summary>
+    [Parameter] public DateTime? Min { get; set; }
+
+    /// <summary>Data máxima permitida.</summary>
+    [Parameter] public DateTime? Max { get; set; }
+
+    /// <summary>Desabilita o campo.</summary>
+    [Parameter] public bool Desabilitado { get; set; }
+
+    /// <summary>Classes CSS adicionais.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    /// <summary>Demais atributos HTML.</summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AtributosExtras { get; set; }
+
+    private string Formato
+    {
+        get
+        {
+            switch (Tipo)
+            {
+                case "datetime-local":
+                    return "yyyy-MM-ddTHH:mm";
+                case "time":
+                    return "HH:mm";
+                case "month":
+                    return "yyyy-MM";
+                default:
+                    return "yyyy-MM-dd";
+            }
+        }
+    }
+
+    private string IconeTipo
+    {
+        get
+        {
+            switch (Tipo)
+            {
+                case "time":
+                    return "bi-clock";
+                case "datetime-local":
+                    return "bi-calendar-event";
+                default:
+                    return "bi-calendar3";
+            }
+        }
+    }
+
+    private string ValorString =>
+        Valor.HasValue ? Valor.Value.ToString(Formato, CultureInfo.InvariantCulture) : string.Empty;
+
+    private string? FormatarLimite(DateTime? limite) =>
+        limite.HasValue ? limite.Value.ToString(Formato, CultureInfo.InvariantCulture) : null;
+
+    private async Task AoMudar(ChangeEventArgs e)
+    {
+        var texto = e.Value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(texto))
+        {
+            await DefinirValor(null);
+            return;
+        }
+
+        if (Tipo == "time")
+        {
+            if (TimeSpan.TryParse(texto, CultureInfo.InvariantCulture, out var hora))
+            {
+                await DefinirValor(DateTime.Today.Add(hora));
+            }
+            return;
+        }
+
+        if (DateTime.TryParseExact(texto, Formato, CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out var data))
+        {
+            await DefinirValor(data);
+        }
+    }
+
+    private async Task DefinirValor(DateTime? novo)
+    {
+        Valor = novo;
+        if (ValorChanged.HasDelegate)
+        {
+            await ValorChanged.InvokeAsync(novo);
+        }
+    }
+}

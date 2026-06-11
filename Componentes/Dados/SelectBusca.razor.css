@@ -1,0 +1,198 @@
+.pd-select {
+    position: relative;
+    width: 100%;
+    color: var(--pd-texto);
+}
+
+.pd-select__controle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    background-color: var(--pd-surface-2);
+    border: 1px solid var(--pd-border-forte);
+    border-radius: var(--pd-raio);
+    color: var(--pd-texto);
+    padding: 0.55rem 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color var(--pd-transicao), box-shadow var(--pd-transicao);
+}
+
+.pd-select__controle:focus-visible {
+    outline: none;
+    border-color: var(--pd-primario);
+    box-shadow: var(--pd-foco);
+}
+
+.pd-select--aberto .pd-select__controle {
+    border-color: var(--pd-primario);
+}
+
+.pd-select--desabilitado .pd-select__controle {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.pd-select__valor {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pd-select__placeholder {
+    color: var(--pd-texto-fraco);
+}
+
+.pd-select__acoes-controle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.pd-select__limpar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: var(--pd-raio-sm);
+    color: var(--pd-texto-fraco);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.pd-select__limpar:hover {
+    background-color: var(--pd-surface-3);
+    color: var(--pd-texto);
+}
+
+.pd-select__chevron {
+    color: var(--pd-texto-suave);
+    font-size: 0.8rem;
+    transition: transform var(--pd-transicao);
+}
+
+.pd-select--aberto .pd-select__chevron {
+    transform: rotate(180deg);
+}
+
+/* Backdrop transparente para clique-fora (sem JS) */
+.pd-select__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+}
+
+/* Painel suspenso */
+.pd-select__painel {
+    position: absolute;
+    z-index: 50;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background-color: var(--pd-surface);
+    border: 1px solid var(--pd-border-forte);
+    border-radius: var(--pd-raio);
+    box-shadow: var(--pd-sombra);
+    overflow: hidden;
+    animation: pd-select-abre var(--pd-transicao) ease;
+}
+
+.pd-select__busca {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--pd-border);
+}
+
+.pd-select__busca i {
+    color: var(--pd-texto-fraco);
+    font-size: 0.9rem;
+}
+
+.pd-select__busca input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--pd-texto);
+    font-size: 0.875rem;
+}
+
+.pd-select__busca input::placeholder {
+    color: var(--pd-texto-fraco);
+}
+
+.pd-select__lista {
+    max-height: 14rem;
+    overflow-y: auto;
+    padding: 0.3rem;
+}
+
+.pd-select__opcao {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    border: none;
+    border-radius: var(--pd-raio-sm);
+    background: transparent;
+    color: var(--pd-texto);
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--pd-transicao);
+}
+
+.pd-select__opcao:hover:not(:disabled) {
+    background-color: var(--pd-surface-3);
+}
+
+.pd-select__opcao:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.pd-select__opcao--ativa {
+    background-color: var(--pd-primario-suave);
+    color: var(--pd-texto);
+}
+
+.pd-select__opcao > span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pd-select__check {
+    color: var(--pd-primario);
+    flex-shrink: 0;
+}
+
+.pd-select__sem-resultado {
+    padding: 0.9rem 0.6rem;
+    text-align: center;
+    color: var(--pd-texto-fraco);
+    font-size: 0.85rem;
+}
+
+@keyframes pd-select-abre {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pd-select__painel {
+        animation: none;
+    }
+}

@@ -11,29 +11,73 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows,browser
 build_property.RootNamespace = DllTeste
 build_property.RootNamespace = DllTeste
-build_property.ProjectDir = C:\Users\Weverton\source\repos\DllTeste\
+build_property.ProjectDir = C:\Users\Weverton\Documents\GitHub\DllTeste\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Weverton\source\repos\DllTeste
+build_property.MSBuildProjectDirectory = C:\Users\Weverton\Documents\GitHub\DllTeste
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Weverton/source/repos/DllTeste/Componentes/Menu/MenuSistema.razor]
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Dados/Coluna.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcRGFkb3NcQ29sdW5hLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Menu/MenuSistema.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcTWVudVxNZW51U2lzdGVtYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Weverton/source/repos/DllTeste/Componentes/Menu/MenuSistemaItem.razor]
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Menu/MenuSistemaItem.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcTWVudVxNZW51U2lzdGVtYUl0ZW0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Weverton/source/repos/DllTeste/Componentes/Paginas/Login.razor]
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Paginas/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUGFnaW5hc1xMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Weverton/source/repos/DllTeste/_Imports.razor]
+[C:/Users/Weverton/Documents/GitHub/DllTeste/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Botao.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQm90YW8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-6kviz5uff1
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Cartao.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQ2FydGFvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-ar7j6q0jc7
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Confirmacao/ConfirmacaoDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQ29uZmlybWFjYW9cQ29uZmlybWFjYW9EaWFsb2cucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-imnwlh1o0w
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Dados/CampoData.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcRGFkb3NcQ2FtcG9EYXRhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-nfvfs8mf8f
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Dados/MultiSelect.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcRGFkb3NcTXVsdGlTZWxlY3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-grlld7ckv4
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Dados/SelectBusca.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcRGFkb3NcU2VsZWN0QnVzY2EucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-56rtycxdfp
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Dados/Tabela.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcRGFkb3NcVGFiZWxhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-reaawn4lbd
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Exemplos/Demonstracao.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcRXhlbXBsb3NcRGVtb25zdHJhY2FvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-5nqt4od3x4
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Modal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcTW9kYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-knl7j1uhje
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Toasts/ToastContainer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcVG9hc3RzXFRvYXN0Q29udGFpbmVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-pkbqw8gltk

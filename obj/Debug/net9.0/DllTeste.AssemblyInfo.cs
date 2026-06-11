@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DllTeste")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb4b43b70fb77e40f3c8509645ba74d772b51f89")]
 [assembly: System.Reflection.AssemblyProductAttribute("DllTeste")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DllTeste")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

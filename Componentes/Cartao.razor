@@ -1,0 +1,72 @@
+@namespace DllTeste.Componentes
+
+<div class="pd-cartao @Class" @attributes="AtributosExtras">
+
+    @if (Cabecalho is not null || !string.IsNullOrWhiteSpace(Titulo))
+    {
+        <div class="pd-cartao__cabecalho">
+            @if (Cabecalho is not null)
+            {
+                @Cabecalho
+            }
+            else
+            {
+                <div class="pd-cartao__titulo">
+                    @if (!string.IsNullOrWhiteSpace(Icone))
+                    {
+                        <i class="bi @Icone" aria-hidden="true"></i>
+                    }
+                    <span>@Titulo</span>
+                </div>
+            }
+
+            @if (AcoesCabecalho is not null)
+            {
+                <div class="pd-cartao__acoes">
+                    @AcoesCabecalho
+                </div>
+            }
+        </div>
+    }
+
+    <div class="pd-cartao__corpo @(SemPaddingCorpo ? "pd-cartao__corpo--sem-padding" : "")">
+        @ChildContent
+    </div>
+
+    @if (Rodape is not null)
+    {
+        <div class="pd-cartao__rodape">
+            @Rodape
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>Titulo simples do cabecalho. Ignorado se Cabecalho for informado.</summary>
+    [Parameter] public string? Titulo { get; set; }
+
+    /// <summary>Icone (Bootstrap Icons) ao lado do titulo, ex: "bi-people".</summary>
+    [Parameter] public string? Icone { get; set; }
+
+    /// <summary>Cabecalho customizado (substitui Titulo/Icone).</summary>
+    [Parameter] public RenderFragment? Cabecalho { get; set; }
+
+    /// <summary>Acoes alinhadas a direita do cabecalho (botoes, menus).</summary>
+    [Parameter] public RenderFragment? AcoesCabecalho { get; set; }
+
+    /// <summary>Conteudo principal.</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Rodape opcional.</summary>
+    [Parameter] public RenderFragment? Rodape { get; set; }
+
+    /// <summary>Remove o padding interno do corpo (util para tabelas).</summary>
+    [Parameter] public bool SemPaddingCorpo { get; set; }
+
+    /// <summary>Classes CSS adicionais.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    /// <summary>Demais atributos HTML.</summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AtributosExtras { get; set; }
+}

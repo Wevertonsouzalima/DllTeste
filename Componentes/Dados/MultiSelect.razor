@@ -1,0 +1,236 @@
+@namespace DllTeste.Componentes.Dados
+
+<div class="pd-multi @(_aberto ? "pd-multi--aberto" : null) @(Desabilitado ? "pd-multi--desabilitado" : null) @Class">
+
+    <div class="pd-multi__controle" @onclick="Alternar">
+        @if (Selecionadas.Count == 0)
+        {
+            <span class="pd-multi__placeholder">@Placeholder</span>
+        }
+        else
+        {
+            <div class="pd-multi__chips">
+                @foreach (var op in ChipsVisiveis)
+                {
+                    <span class="pd-multi__chip" @key="op.Valor">
+                        @op.Texto
+                        @if (!Desabilitado)
+                        {
+                            <span class="pd-multi__chip-x"
+                                  role="button"
+                                  tabindex="0"
+                                  aria-label="Remover"
+                                  @onclick="() => Remover(op.Valor)"
+                                  @onclick:stopPropagation="true">
+                                <i class="bi bi-x" aria-hidden="true"></i>
+                            </span>
+                        }
+                    </span>
+                }
+                @if (ExcedentesChips > 0)
+                {
+                    <span class="pd-multi__chip pd-multi__chip--mais">+@ExcedentesChips</span>
+                }
+            </div>
+        }
+
+        <span class="pd-multi__acoes-controle">
+            @if (PermiteLimpar && Selecionadas.Count > 0 && !Desabilitado)
+            {
+                <span class="pd-multi__limpar"
+                      role="button"
+                      tabindex="0"
+                      aria-label="Limpar tudo"
+                      @onclick="LimparTudo"
+                      @onclick:stopPropagation="true">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                </span>
+            }
+            <i class="bi bi-chevron-down pd-multi__chevron" aria-hidden="true"></i>
+        </span>
+    </div>
+
+    @if (_aberto)
+    {
+        <div class="pd-multi__backdrop" @onclick="Fechar"></div>
+
+        <div class="pd-multi__painel" role="listbox" aria-multiselectable="true">
+            <div class="pd-multi__busca">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input type="text"
+                       placeholder="@PlaceholderBusca"
+                       value="@_filtro"
+                       @oninput="AoFiltrar"
+                       @ref="_inputBusca"
+                       aria-label="@PlaceholderBusca" />
+            </div>
+
+            <div class="pd-multi__lista">
+                @if (OpcoesFiltradas.Count == 0)
+                {
+                    <div class="pd-multi__sem-resultado">Nada encontrado.</div>
+                }
+                else
+                {
+                    @foreach (var op in OpcoesFiltradas)
+                    {
+                        bool marcada = EstaSelecionada(op.Valor);
+                        <button type="button"
+                                class="pd-multi__opcao @(marcada ? "pd-multi__opcao--ativa" : null)"
+                                disabled="@op.Desabilitada"
+                                @key="op.Valor"
+                                @onclick="() => Alternar(op)">
+                            <span class="pd-multi__check @(marcada ? "pd-multi__check--on" : null)">
+                                @if (marcada)
+                                {
+                                    <i class="bi bi-check2" aria-hidden="true"></i>
+                                }
+                            </span>
+                            @if (!string.IsNullOrWhiteSpace(op.Icone))
+                            {
+                                <i class="bi @op.Icone" aria-hidden="true"></i>
+                            }
+                            <span class="pd-multi__opcao-texto">@op.Texto</span>
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool _aberto;
+    private string _filtro = string.Empty;
+    private ElementReference _inputBusca;
+
+    /// <summary>Lista de opções.</summary>
+    [Parameter] public IReadOnlyList<OpcaoSelect> Opcoes { get; set; } = Array.Empty<OpcaoSelect>();
+
+    /// <summary>Valores selecionados. Use com @bind-Valores.</summary>
+    [Parameter] public List<string> Valores { get; set; } = new();
+
+    /// <summary>Notifica mudança em Valores.</summary>
+    [Parameter] public EventCallback<List<string>> ValoresChanged { get; set; }
+
+    /// <summary>Texto quando nada está selecionado.</summary>
+    [Parameter] public string Placeholder { get; set; } = "Selecione...";
+
+    /// <summary>Placeholder do campo de busca.</summary>
+    [Parameter] public string PlaceholderBusca { get; set; } = "Buscar...";
+
+    /// <summary>Máximo de chips exibidos no controle (0 = todos).</summary>
+    [Parameter] public int MaxChipsVisiveis { get; set; } = 0;
+
+    /// <summary>Exibe o botão de limpar tudo.</summary>
+    [Parameter] public bool PermiteLimpar { get; set; } = true;
+
+    /// <summary>Desabilita o componente.</summary>
+    [Parameter] public bool Desabilitado { get; set; }
+
+    /// <summary>Classes CSS adicionais.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    private List<OpcaoSelect> Selecionadas =>
+        Opcoes.Where(o => Valores.Contains(o.Valor)).ToList();
+
+    private List<OpcaoSelect> ChipsVisiveis =>
+        MaxChipsVisiveis > 0 ? Selecionadas.Take(MaxChipsVisiveis).ToList() : Selecionadas;
+
+    private int ExcedentesChips =>
+        MaxChipsVisiveis > 0 ? Math.Max(0, Selecionadas.Count - MaxChipsVisiveis) : 0;
+
+    private List<OpcaoSelect> OpcoesFiltradas
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(_filtro))
+            {
+                return Opcoes.ToList();
+            }
+
+            var termo = _filtro.Trim();
+            return Opcoes
+                .Where(o => o.Texto.Contains(termo, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+    }
+
+    private bool EstaSelecionada(string valor) => Valores.Contains(valor);
+
+    private void Alternar()
+    {
+        if (Desabilitado)
+        {
+            return;
+        }
+
+        _aberto = !_aberto;
+        if (_aberto)
+        {
+            _filtro = string.Empty;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool primeiraVez)
+    {
+        if (_aberto)
+        {
+            try
+            {
+                await _inputBusca.FocusAsync();
+            }
+            catch (Exception)
+            {
+                // Elemento ainda nao disponivel: ignora.
+            }
+        }
+    }
+
+    private void AoFiltrar(ChangeEventArgs e)
+    {
+        _filtro = e.Value?.ToString() ?? string.Empty;
+    }
+
+    private async Task Alternar(OpcaoSelect opcao)
+    {
+        if (opcao.Desabilitada)
+        {
+            return;
+        }
+
+        var novos = new List<string>(Valores);
+        if (!novos.Remove(opcao.Valor))
+        {
+            novos.Add(opcao.Valor);
+        }
+
+        await Atualizar(novos);
+    }
+
+    private async Task Remover(string valor)
+    {
+        var novos = new List<string>(Valores);
+        novos.Remove(valor);
+        await Atualizar(novos);
+    }
+
+    private async Task LimparTudo()
+    {
+        await Atualizar(new List<string>());
+    }
+
+    private async Task Atualizar(List<string> novos)
+    {
+        Valores = novos;
+        if (ValoresChanged.HasDelegate)
+        {
+            await ValoresChanged.InvokeAsync(novos);
+        }
+    }
+
+    private void Fechar()
+    {
+        _aberto = false;
+    }
+}

@@ -1,0 +1,65 @@
+@namespace DllTeste.Componentes.Confirmacao
+
+@implements IDisposable
+@inject IConfirmacaoService Confirmacao
+
+@if (Confirmacao.Atual is { } opcoes)
+{
+    <Modal Visivel="true"
+           Titulo="@opcoes.Titulo"
+           Icone="@opcoes.Icone"
+           Tamanho="sm"
+           MostrarBotaoFechar="true"
+           FecharNoFundo="true"
+           OnFechar="Cancelar">
+
+        <div class="pd-confirmacao__mensagem">@opcoes.Mensagem</div>
+
+        <Rodape>
+            <Botao Variante="BotaoVariante.Secundario"
+                   Texto="@opcoes.TextoCancelar"
+                   OnClick="Cancelar" />
+            <Botao Variante="@VarianteConfirmar(opcoes)"
+                   Texto="@opcoes.TextoConfirmar"
+                   OnClick="Confirmar" />
+        </Rodape>
+    </Modal>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        Confirmacao.AoMudar += AoMudar;
+    }
+
+    private async void AoMudar()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void Confirmar()
+    {
+        Confirmacao.Responder(true);
+    }
+
+    private void Cancelar()
+    {
+        Confirmacao.Responder(false);
+    }
+
+    private BotaoVariante VarianteConfirmar(ConfirmacaoOpcoes opcoes)
+    {
+        // Acao destrutiva usa vermelho, salvo variante explicita diferente da padrao.
+        if (opcoes.Perigosa && opcoes.VarianteConfirmar == BotaoVariante.Primario)
+        {
+            return BotaoVariante.Perigo;
+        }
+
+        return opcoes.VarianteConfirmar;
+    }
+
+    public void Dispose()
+    {
+        Confirmacao.AoMudar -= AoMudar;
+    }
+}

@@ -1,3 +1,5 @@
+C:\Users\Weverton\source\repos\DllTeste\bin\Debug\net9.0\wwwroot\css\dllteste-menu.css
+C:\Users\Weverton\source\repos\DllTeste\bin\Debug\net9.0\wwwroot\css\dllteste-menu.css.gz
 C:\Users\Weverton\source\repos\DllTeste\bin\Debug\net9.0\DllTeste.staticwebassets.runtime.json
 C:\Users\Weverton\source\repos\DllTeste\bin\Debug\net9.0\DllTeste.staticwebassets.endpoints.json
 C:\Users\Weverton\source\repos\DllTeste\bin\Debug\net9.0\DllTeste.deps.json
@@ -13,6 +15,9 @@ C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\rjimswa.dswa.cache.json
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\scopedcss\bundle\DllTeste.styles.css
+C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\compressed\4167fwg6c9-{0}-r95z03c4ax-r95z03c4ax.gz
+C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\compressed\1scnr6qs0a-{0}-0sh2dvz02e-0sh2dvz02e.gz
+C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\compressed\v0hdxq8kbi-{0}-4dlbr4ud2t-4dlbr4ud2t.gz
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\staticwebassets.development.json
@@ -29,8 +34,3 @@ C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\DllTeste.dll
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\refint\DllTeste.dll
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\DllTeste.pdb
 C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\ref\DllTeste.dll
-C:\Users\Weverton\source\repos\DllTeste\bin\Debug\net9.0\wwwroot\css\dllteste-menu.css
-C:\Users\Weverton\source\repos\DllTeste\bin\Debug\net9.0\wwwroot\css\dllteste-menu.css.gz
-C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\compressed\1scnr6qs0a-{0}-0sh2dvz02e-0sh2dvz02e.gz
-C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\compressed\v0hdxq8kbi-{0}-4dlbr4ud2t-4dlbr4ud2t.gz
-C:\Users\Weverton\source\repos\DllTeste\obj\Debug\net9.0\compressed\4167fwg6c9-{0}-r95z03c4ax-r95z03c4ax.gz

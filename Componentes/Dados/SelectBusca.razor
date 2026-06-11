@@ -1,0 +1,198 @@
+@namespace DllTeste.Componentes.Dados
+
+<div class="pd-select @(_aberto ? "pd-select--aberto" : null) @(Desabilitado ? "pd-select--desabilitado" : null) @Class">
+
+    <button type="button"
+            class="pd-select__controle"
+            disabled="@Desabilitado"
+            @onclick="Alternar">
+        @if (OpcaoSelecionada is { } sel)
+        {
+            <span class="pd-select__valor">
+                @if (!string.IsNullOrWhiteSpace(sel.Icone))
+                {
+                    <i class="bi @sel.Icone" aria-hidden="true"></i>
+                }
+                @sel.Texto
+            </span>
+        }
+        else
+        {
+            <span class="pd-select__placeholder">@Placeholder</span>
+        }
+
+        <span class="pd-select__acoes-controle">
+            @if (PermiteLimpar && OpcaoSelecionada is not null && !Desabilitado)
+            {
+                <span class="pd-select__limpar"
+                      role="button"
+                      tabindex="0"
+                      aria-label="Limpar"
+                      @onclick="Limpar"
+                      @onclick:stopPropagation="true">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                </span>
+            }
+            <i class="bi bi-chevron-down pd-select__chevron" aria-hidden="true"></i>
+        </span>
+    </button>
+
+    @if (_aberto)
+    {
+        <div class="pd-select__backdrop" @onclick="Fechar"></div>
+
+        <div class="pd-select__painel" role="listbox">
+            <div class="pd-select__busca">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input type="text"
+                       placeholder="@PlaceholderBusca"
+                       value="@_filtro"
+                       @oninput="AoFiltrar"
+                       @ref="_inputBusca"
+                       aria-label="@PlaceholderBusca" />
+            </div>
+
+            <div class="pd-select__lista">
+                @if (OpcoesFiltradas.Count == 0)
+                {
+                    <div class="pd-select__sem-resultado">Nada encontrado.</div>
+                }
+                else
+                {
+                    @foreach (var op in OpcoesFiltradas)
+                    {
+                        <button type="button"
+                                class="pd-select__opcao @(op.Valor == Valor ? "pd-select__opcao--ativa" : null)"
+                                disabled="@op.Desabilitada"
+                                @key="op.Valor"
+                                @onclick="() => Selecionar(op)">
+                            @if (!string.IsNullOrWhiteSpace(op.Icone))
+                            {
+                                <i class="bi @op.Icone" aria-hidden="true"></i>
+                            }
+                            <span>@op.Texto</span>
+                            @if (op.Valor == Valor)
+                            {
+                                <i class="bi bi-check2 pd-select__check" aria-hidden="true"></i>
+                            }
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool _aberto;
+    private string _filtro = string.Empty;
+    private ElementReference _inputBusca;
+
+    /// <summary>Lista de opções.</summary>
+    [Parameter] public IReadOnlyList<OpcaoSelect> Opcoes { get; set; } = Array.Empty<OpcaoSelect>();
+
+    /// <summary>Valor selecionado. Use com @bind-Valor.</summary>
+    [Parameter] public string? Valor { get; set; }
+
+    /// <summary>Notifica mudança de Valor.</summary>
+    [Parameter] public EventCallback<string?> ValorChanged { get; set; }
+
+    /// <summary>Texto quando nada está selecionado.</summary>
+    [Parameter] public string Placeholder { get; set; } = "Selecione...";
+
+    /// <summary>Placeholder do campo de busca.</summary>
+    [Parameter] public string PlaceholderBusca { get; set; } = "Buscar...";
+
+    /// <summary>Exibe o botão de limpar quando há seleção.</summary>
+    [Parameter] public bool PermiteLimpar { get; set; } = true;
+
+    /// <summary>Desabilita o componente.</summary>
+    [Parameter] public bool Desabilitado { get; set; }
+
+    /// <summary>Classes CSS adicionais.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    private OpcaoSelect? OpcaoSelecionada =>
+        Opcoes.FirstOrDefault(o => o.Valor == Valor);
+
+    private List<OpcaoSelect> OpcoesFiltradas
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(_filtro))
+            {
+                return Opcoes.ToList();
+            }
+
+            var termo = _filtro.Trim();
+            return Opcoes
+                .Where(o => o.Texto.Contains(termo, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+    }
+
+    private async Task Alternar()
+    {
+        if (Desabilitado)
+        {
+            return;
+        }
+
+        _aberto = !_aberto;
+        if (_aberto)
+        {
+            _filtro = string.Empty;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool primeiraVez)
+    {
+        if (_aberto)
+        {
+            try
+            {
+                await _inputBusca.FocusAsync();
+            }
+            catch (Exception)
+            {
+                // Elemento ainda nao disponivel: ignora.
+            }
+        }
+    }
+
+    private void AoFiltrar(ChangeEventArgs e)
+    {
+        _filtro = e.Value?.ToString() ?? string.Empty;
+    }
+
+    private async Task Selecionar(OpcaoSelect opcao)
+    {
+        if (opcao.Desabilitada)
+        {
+            return;
+        }
+
+        Valor = opcao.Valor;
+        _aberto = false;
+
+        if (ValorChanged.HasDelegate)
+        {
+            await ValorChanged.InvokeAsync(Valor);
+        }
+    }
+
+    private async Task Limpar()
+    {
+        Valor = null;
+
+        if (ValorChanged.HasDelegate)
+        {
+            await ValorChanged.InvokeAsync(Valor);
+        }
+    }
+
+    private void Fechar()
+    {
+        _aberto = false;
+    }
+}

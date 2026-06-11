@@ -1,0 +1,62 @@
+.pd-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+    color: var(--pd-texto);
+}
+
+.pd-data__rotulo {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--pd-texto-suave);
+}
+
+.pd-data__campo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--pd-surface-2);
+    border: 1px solid var(--pd-border-forte);
+    border-radius: var(--pd-raio);
+    padding: 0 0.75rem;
+    transition: border-color var(--pd-transicao), box-shadow var(--pd-transicao);
+}
+
+.pd-data__campo:focus-within {
+    border-color: var(--pd-primario);
+    box-shadow: var(--pd-foco);
+}
+
+.pd-data__icone {
+    color: var(--pd-texto-fraco);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.pd-data__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--pd-texto);
+    font-size: 0.9rem;
+    padding: 0.55rem 0;
+    /* Faz o seletor nativo (calendario/relogio) abrir no tema correto,
+       inclusive no Android do S25 Ultra. Controlado por token de tema. */
+    color-scheme: var(--pd-color-scheme, dark);
+}
+
+/* Deixa o icone nativo do picker visivel conforme o tema */
+.pd-data__input::-webkit-calendar-picker-indicator {
+    filter: var(--pd-picker-filter, invert(0.7));
+    cursor: pointer;
+}
+
+.pd-data--desabilitado .pd-data__campo {
+    opacity: 0.55;
+}
+
+.pd-data--desabilitado .pd-data__input {
+    cursor: not-allowed;
+}

@@ -1,0 +1,141 @@
+@namespace DllTeste.Componentes
+
+@using Microsoft.JSInterop;
+
+@implements IAsyncDisposable
+
+@inject IJSRuntime JS
+
+@if (Visivel)
+{
+    <div class="pd-modal-backdrop" @onclick="AoClicarFundo">
+        <div class="pd-modal @ClasseTamanho"
+             role="dialog"
+             aria-modal="true"
+             aria-label="@Titulo"
+             @onclick:stopPropagation="true">
+
+            @if (MostrarCabecalho)
+            {
+                <div class="pd-modal__cabecalho">
+                    <div class="pd-modal__titulo">
+                        @if (!string.IsNullOrWhiteSpace(Icone))
+                        {
+                            <i class="bi @Icone" aria-hidden="true"></i>
+                        }
+                        <span>@Titulo</span>
+                    </div>
+
+                    @if (MostrarBotaoFechar)
+                    {
+                        <button type="button"
+                                class="pd-modal__fechar"
+                                aria-label="Fechar"
+                                @onclick="FecharAsync">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    }
+                </div>
+            }
+
+            <div class="pd-modal__corpo">
+                @ChildContent
+            </div>
+
+            @if (Rodape is not null)
+            {
+                <div class="pd-modal__rodape">
+                    @Rodape
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private bool _visivelAnterior;
+    private IJSObjectReference? _foco;
+
+    /// <summary>Controla a exibicao. Use com @bind-Visivel.</summary>
+    [Parameter] public bool Visivel { get; set; }
+
+    /// <summary>Notifica mudancas de Visivel (suporta @bind-Visivel).</summary>
+    [Parameter] public EventCallback<bool> VisivelChanged { get; set; }
+
+    /// <summary>Titulo do cabecalho.</summary>
+    [Parameter] public string? Titulo { get; set; }
+
+    /// <summary>Icone (Bootstrap Icons) do cabecalho.</summary>
+    [Parameter] public string? Icone { get; set; }
+
+    /// <summary>Conteudo do corpo.</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Rodape opcional (botoes de acao).</summary>
+    [Parameter] public RenderFragment? Rodape { get; set; }
+
+    /// <summary>Tamanho: "sm", "md" (padrao), "lg" ou "xl".</summary>
+    [Parameter] public string Tamanho { get; set; } = "md";
+
+    /// <summary>Exibe o cabecalho com titulo.</summary>
+    [Parameter] public bool MostrarCabecalho { get; set; } = true;
+
+    /// <summary>Exibe o botao X de fechar.</summary>
+    [Parameter] public bool MostrarBotaoFechar { get; set; } = true;
+
+    /// <summary>Permite fechar ao clicar no fundo escurecido.</summary>
+    [Parameter] public bool FecharNoFundo { get; set; } = true;
+
+    /// <summary>Disparado quando o modal e fechado.</summary>
+    [Parameter] public EventCallback OnFechar { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool primeiraVez)
+    {
+        // Bloqueia o scroll do body enquanto o modal estiver aberto.
+        if (Visivel != _visivelAnterior)
+        {
+            _visivelAnterior = Visivel;
+            await JS.InvokeVoidAsync(
+                "document.body.classList." + (Visivel ? "add" : "remove"),
+                "pd-modal-aberto");
+        }
+    }
+
+    private async Task AoClicarFundo()
+    {
+        if (FecharNoFundo)
+        {
+            await FecharAsync();
+        }
+    }
+
+    private async Task FecharAsync()
+    {
+        if (VisivelChanged.HasDelegate)
+        {
+            await VisivelChanged.InvokeAsync(false);
+        }
+
+        if (OnFechar.HasDelegate)
+        {
+            await OnFechar.InvokeAsync();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("document.body.classList.remove", "pd-modal-aberto");
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuito ja encerrado: nada a fazer.
+        }
+
+        if (_foco is not null)
+        {
+            await _foco.DisposeAsync();
+        }
+    }
+}
