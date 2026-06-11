@@ -1,0 +1,237 @@
+.pd-multi {
+    position: relative;
+    width: 100%;
+    color: var(--pd-texto);
+}
+
+.pd-multi__controle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 2.6rem;
+    background-color: var(--pd-surface-2);
+    border: 1px solid var(--pd-border-forte);
+    border-radius: var(--pd-raio);
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+    transition: border-color var(--pd-transicao), box-shadow var(--pd-transicao);
+}
+
+.pd-multi--aberto .pd-multi__controle {
+    border-color: var(--pd-primario);
+    box-shadow: var(--pd-foco);
+}
+
+.pd-multi--desabilitado .pd-multi__controle {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.pd-multi__placeholder {
+    color: var(--pd-texto-fraco);
+    font-size: 0.9rem;
+    padding: 0.2rem 0.15rem;
+}
+
+.pd-multi__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.pd-multi__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background-color: var(--pd-primario-suave);
+    border: 1px solid rgba(37, 99, 235, 0.4);
+    color: var(--pd-texto);
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.8rem;
+    max-width: 100%;
+}
+
+.pd-multi__chip--mais {
+    background-color: var(--pd-surface-3);
+    border-color: var(--pd-border-forte);
+    color: var(--pd-texto-suave);
+}
+
+.pd-multi__chip-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--pd-texto-suave);
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.pd-multi__chip-x:hover {
+    color: var(--pd-texto);
+}
+
+.pd-multi__acoes-controle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.pd-multi__limpar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: var(--pd-raio-sm);
+    color: var(--pd-texto-fraco);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.pd-multi__limpar:hover {
+    background-color: var(--pd-surface-3);
+    color: var(--pd-texto);
+}
+
+.pd-multi__chevron {
+    color: var(--pd-texto-suave);
+    font-size: 0.8rem;
+    transition: transform var(--pd-transicao);
+}
+
+.pd-multi--aberto .pd-multi__chevron {
+    transform: rotate(180deg);
+}
+
+/* Clique-fora sem JS */
+.pd-multi__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+}
+
+.pd-multi__painel {
+    position: absolute;
+    z-index: 50;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background-color: var(--pd-surface);
+    border: 1px solid var(--pd-border-forte);
+    border-radius: var(--pd-raio);
+    box-shadow: var(--pd-sombra);
+    overflow: hidden;
+    animation: pd-multi-abre var(--pd-transicao) ease;
+}
+
+.pd-multi__busca {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--pd-border);
+}
+
+.pd-multi__busca i {
+    color: var(--pd-texto-fraco);
+    font-size: 0.9rem;
+}
+
+.pd-multi__busca input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--pd-texto);
+    font-size: 0.875rem;
+}
+
+.pd-multi__busca input::placeholder {
+    color: var(--pd-texto-fraco);
+}
+
+.pd-multi__lista {
+    max-height: 14rem;
+    overflow-y: auto;
+    padding: 0.3rem;
+}
+
+.pd-multi__opcao {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.6rem;
+    border: none;
+    border-radius: var(--pd-raio-sm);
+    background: transparent;
+    color: var(--pd-texto);
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--pd-transicao);
+}
+
+.pd-multi__opcao:hover:not(:disabled) {
+    background-color: var(--pd-surface-3);
+}
+
+.pd-multi__opcao:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.pd-multi__opcao--ativa {
+    background-color: var(--pd-primario-suave);
+}
+
+.pd-multi__opcao-texto {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pd-multi__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1px solid var(--pd-border-forte);
+    border-radius: 4px;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    color: #fff;
+    transition: background-color var(--pd-transicao), border-color var(--pd-transicao);
+}
+
+.pd-multi__check--on {
+    background-color: var(--pd-primario);
+    border-color: var(--pd-primario);
+}
+
+.pd-multi__sem-resultado {
+    padding: 0.9rem 0.6rem;
+    text-align: center;
+    color: var(--pd-texto-fraco);
+    font-size: 0.85rem;
+}
+
+@keyframes pd-multi-abre {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pd-multi__painel {
+        animation: none;
+    }
+}

@@ -1,0 +1,40 @@
+@namespace DllTeste.Componentes.Dados
+@typeparam TItem
+@implements IDisposable
+
+@* Este componente nao renderiza markup proprio: apenas registra a coluna na Tabela pai. *@
+
+@code {
+    [CascadingParameter] public Tabela<TItem>? Tabela { get; set; }
+
+    /// <summary>Titulo exibido no cabecalho.</summary>
+    [Parameter] public string Titulo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Funcao que extrai o valor da coluna (usado para ordenacao e busca).
+    /// Sem ela, a coluna nao e ordenavel nem entra no filtro.
+    /// </summary>
+    [Parameter] public Func<TItem, object?>? Valor { get; set; }
+
+    /// <summary>Template de exibicao da celula. Sem ele, exibe Valor.ToString().</summary>
+    [Parameter] public RenderFragment<TItem>? ChildContent { get; set; }
+
+    /// <summary>Permite ordenar por esta coluna (requer Valor). Padrao: true.</summary>
+    [Parameter] public bool Ordenavel { get; set; } = true;
+
+    /// <summary>Largura CSS opcional, ex: "120px" ou "20%".</summary>
+    [Parameter] public string? Largura { get; set; }
+
+    /// <summary>Classe CSS aplicada as celulas desta coluna (ex: alinhamento).</summary>
+    [Parameter] public string? Classe { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Tabela?.RegistrarColuna(this);
+    }
+
+    public void Dispose()
+    {
+        Tabela?.RemoverColuna(this);
+    }
+}

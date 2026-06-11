@@ -1,0 +1,229 @@
+.pd-tabela {
+    background-color: var(--pd-surface);
+    border: 1px solid var(--pd-border);
+    border-radius: var(--pd-raio-lg);
+    overflow: hidden;
+    color: var(--pd-texto);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Topo: busca */
+.pd-tabela__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--pd-border);
+    flex-wrap: wrap;
+}
+
+.pd-tabela__busca {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--pd-surface-2);
+    border: 1px solid var(--pd-border);
+    border-radius: var(--pd-raio);
+    padding: 0 0.7rem;
+    flex: 1;
+    min-width: 12rem;
+    transition: border-color var(--pd-transicao), box-shadow var(--pd-transicao);
+}
+
+.pd-tabela__busca:focus-within {
+    border-color: var(--pd-primario);
+    box-shadow: var(--pd-foco);
+}
+
+.pd-tabela__busca > i {
+    color: var(--pd-texto-fraco);
+    font-size: 0.95rem;
+}
+
+.pd-tabela__busca input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--pd-texto);
+    font-size: 0.9rem;
+    padding: 0.55rem 0;
+}
+
+.pd-tabela__busca input::placeholder {
+    color: var(--pd-texto-fraco);
+}
+
+.pd-tabela__limpar {
+    display: inline-flex;
+    border: none;
+    background: transparent;
+    color: var(--pd-texto-fraco);
+    cursor: pointer;
+    padding: 0.2rem;
+    border-radius: var(--pd-raio-sm);
+}
+
+.pd-tabela__limpar:hover {
+    color: var(--pd-texto);
+}
+
+.pd-tabela__contador {
+    font-size: 0.8rem;
+    color: var(--pd-primario);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Tabela */
+.pd-tabela__scroll {
+    overflow-x: auto;
+}
+
+.pd-tabela__tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.pd-tabela__tabela thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--pd-texto-suave);
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--pd-border-forte);
+    background-color: var(--pd-surface-2);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.pd-tabela__th-conteudo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.pd-tabela__ordenavel {
+    cursor: pointer;
+    transition: color var(--pd-transicao);
+}
+
+.pd-tabela__ordenavel:hover {
+    color: var(--pd-texto);
+}
+
+.pd-tabela__seta {
+    font-size: 0.8rem;
+}
+
+.pd-tabela__seta--neutra {
+    opacity: 0.4;
+}
+
+.pd-tabela__tabela tbody td {
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--pd-border);
+    color: var(--pd-texto);
+    vertical-align: middle;
+}
+
+.pd-tabela__tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.pd-tabela__tabela tbody tr {
+    transition: background-color var(--pd-transicao);
+}
+
+.pd-tabela__tabela tbody tr:hover {
+    background-color: var(--pd-surface-3);
+}
+
+.pd-tabela__linha--sel {
+    background-color: var(--pd-primario-suave) !important;
+}
+
+/* Coluna de selecao */
+.pd-tabela__col-sel {
+    width: 2.6rem;
+    text-align: center;
+    padding-left: 0.9rem !important;
+    padding-right: 0 !important;
+}
+
+.pd-tabela__col-sel input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--pd-primario);
+    cursor: pointer;
+}
+
+/* Estado vazio */
+.pd-tabela__vazio {
+    text-align: center;
+    padding: 2.5rem 1rem !important;
+    color: var(--pd-texto-fraco);
+}
+
+.pd-tabela__vazio i {
+    display: block;
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+    opacity: 0.6;
+}
+
+/* Paginacao */
+.pd-tabela__paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    border-top: 1px solid var(--pd-border);
+    background-color: var(--pd-surface-2);
+    flex-wrap: wrap;
+}
+
+.pd-tabela__pag-info {
+    font-size: 0.8rem;
+    color: var(--pd-texto-suave);
+}
+
+.pd-tabela__pag-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pd-tabela__pag-num {
+    font-size: 0.85rem;
+    color: var(--pd-texto);
+    min-width: 3.5rem;
+    text-align: center;
+}
+
+.pd-tabela__pag-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--pd-border-forte);
+    border-radius: var(--pd-raio-sm);
+    background-color: var(--pd-surface);
+    color: var(--pd-texto);
+    cursor: pointer;
+    transition: background-color var(--pd-transicao), border-color var(--pd-transicao);
+}
+
+.pd-tabela__pag-btn:hover:not(:disabled) {
+    background-color: var(--pd-surface-3);
+    border-color: var(--pd-primario);
+}
+
+.pd-tabela__pag-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

@@ -1,0 +1,158 @@
+.pd-botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--pd-raio);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    color: #fff;
+    transition: background-color var(--pd-transicao),
+                border-color var(--pd-transicao),
+                box-shadow var(--pd-transicao),
+                transform var(--pd-transicao),
+                opacity var(--pd-transicao);
+}
+
+.pd-botao:active {
+    transform: translateY(1px);
+}
+
+.pd-botao:focus-visible {
+    outline: none;
+    box-shadow: var(--pd-foco);
+}
+
+.pd-botao:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Tamanhos */
+.pd-botao--sm {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8125rem;
+}
+
+.pd-botao--md {
+    padding: 0.55rem 1rem;
+    font-size: 0.9rem;
+}
+
+.pd-botao--lg {
+    padding: 0.75rem 1.4rem;
+    font-size: 1rem;
+}
+
+.pd-botao--bloco {
+    width: 100%;
+}
+
+/* Variantes solidas */
+.pd-botao--primario {
+    background-color: var(--pd-primario);
+}
+
+.pd-botao--primario:hover:not(:disabled) {
+    background-color: var(--pd-primario-hover);
+}
+
+.pd-botao--sucesso {
+    background-color: var(--pd-sucesso);
+}
+
+.pd-botao--sucesso:hover:not(:disabled) {
+    background-color: var(--pd-sucesso-hover);
+}
+
+.pd-botao--perigo {
+    background-color: var(--pd-perigo);
+}
+
+.pd-botao--perigo:hover:not(:disabled) {
+    background-color: var(--pd-perigo-hover);
+}
+
+.pd-botao--aviso {
+    background-color: var(--pd-aviso);
+}
+
+.pd-botao--aviso:hover:not(:disabled) {
+    background-color: var(--pd-aviso-hover);
+}
+
+.pd-botao--info {
+    background-color: var(--pd-info);
+}
+
+.pd-botao--info:hover:not(:disabled) {
+    background-color: var(--pd-info-hover);
+}
+
+.pd-botao--neutro {
+    background-color: var(--pd-neutro);
+}
+
+.pd-botao--neutro:hover:not(:disabled) {
+    background-color: var(--pd-neutro-hover);
+}
+
+/* Secundario: contorno sobre superficie escura */
+.pd-botao--secundario {
+    background-color: transparent;
+    border-color: var(--pd-border-forte);
+    color: var(--pd-texto);
+}
+
+.pd-botao--secundario:hover:not(:disabled) {
+    background-color: var(--pd-surface-3);
+    border-color: var(--pd-primario);
+}
+
+/* Fantasma: sem fundo, so texto */
+.pd-botao--fantasma {
+    background-color: transparent;
+    color: var(--pd-texto-suave);
+}
+
+.pd-botao--fantasma:hover:not(:disabled) {
+    background-color: var(--pd-surface-3);
+    color: var(--pd-texto);
+}
+
+/* Icone e texto */
+.pd-botao__icone {
+    font-size: 1.05em;
+    line-height: 1;
+}
+
+.pd-botao__texto {
+    line-height: 1;
+}
+
+/* Spinner de carregamento */
+.pd-botao__spinner {
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: pd-botao-girar 0.6s linear infinite;
+}
+
+@keyframes pd-botao-girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pd-botao__spinner {
+        animation-duration: 1.5s;
+    }
+}

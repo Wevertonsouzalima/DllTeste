@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TdzAgQHGeEI=",
+  "dgSpecHash": "IPCmP1++x3Y=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+  "projectFilePath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.3.10\\microsoft.aspnetcore.antiforgery.2.3.10.nupkg.sha512",
     "C:\\Users\\Weverton\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.3.10\\microsoft.aspnetcore.authentication.2.3.10.nupkg.sha512",
@@ -33,36 +33,36 @@
       "code": "NU1510",
       "level": "Warning",
       "message": "A Microsoft.AspNetCore.Antiforgery PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
-      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "projectPath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "filePath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "targetGraphs": []
     },
     {
       "code": "NU1510",
       "level": "Warning",
       "message": "A Microsoft.AspNetCore.Authentication PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
-      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "projectPath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "filePath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "targetGraphs": []
     },
     {
       "code": "NU1510",
       "level": "Warning",
       "message": "A Microsoft.AspNetCore.Authentication.Cookies PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
-      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "projectPath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "filePath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "targetGraphs": []
     },
     {
       "code": "NU1510",
       "level": "Warning",
       "message": "A Microsoft.AspNetCore.Components.Web PackageReference não será removida. Considere remover este pacote de suas dependências, pois provavelmente é desnecessário.",
-      "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "projectPath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+      "filePath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
       "targetGraphs": []
     }
   ]

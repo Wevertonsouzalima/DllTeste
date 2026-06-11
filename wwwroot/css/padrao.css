@@ -1,0 +1,152 @@
+/*
+    padrao.css
+    Tokens visuais compartilhados pelos componentes padrao.
+    Importe este arquivo UMA vez no <head> do App.razor (ou _Host).
+
+    TEMA:
+    - O tema ESCURO e o padrao (aplicado no :root).
+    - O tema CLARO e ativado por uma classe de tema em qualquer ancestral:
+        .pd-tema-claro            (classe generica deste pacote)
+        .bi-layout-claro          (compatibilidade com o layout do projeto)
+      O analogo escuro (.pd-tema-escuro / .bi-layout-escuro) tambem e aceito.
+    - Como sao variaveis CSS herdadas, basta a classe estar no container raiz
+      (ex: o <div> do MainLayout) que todos os componentes internos acompanham.
+*/
+
+:root {
+    /* Foco acessivel */
+    --pd-foco: 0 0 0 3px rgba(37, 99, 235, 0.45);
+
+    /* Raio */
+    --pd-raio-sm: 6px;
+    --pd-raio: 10px;
+    --pd-raio-lg: 14px;
+
+    /* Transicao */
+    --pd-transicao: 160ms ease;
+
+    /* Camadas (z-index) */
+    --pd-z-modal: 1050;
+    --pd-z-toast: 1080;
+}
+
+/* =========================================================
+   TEMA ESCURO (padrao)
+   ========================================================= */
+:root,
+.pd-tema-escuro,
+.bi-layout-escuro {
+    /* Superficies */
+    --pd-bg: #0b1120;
+    --pd-surface: #0f172a;
+    --pd-surface-2: #0b1225;
+    --pd-surface-3: #111c33;
+
+    /* Bordas */
+    --pd-border: #1e293b;
+    --pd-border-forte: #334155;
+
+    /* Texto */
+    --pd-texto: #e2e8f0;
+    --pd-texto-suave: #94a3b8;
+    --pd-texto-fraco: #64748b;
+
+    /* Cores de acao */
+    --pd-primario: #2563eb;
+    --pd-primario-hover: #1d4ed8;
+    --pd-primario-suave: rgba(37, 99, 235, 0.16);
+
+    --pd-sucesso: #16a34a;
+    --pd-sucesso-hover: #15803d;
+    --pd-sucesso-suave: rgba(22, 163, 74, 0.16);
+
+    --pd-perigo: #dc2626;
+    --pd-perigo-hover: #b91c1c;
+    --pd-perigo-suave: rgba(220, 38, 38, 0.16);
+
+    --pd-aviso: #d97706;
+    --pd-aviso-hover: #b45309;
+    --pd-aviso-suave: rgba(217, 119, 6, 0.16);
+
+    --pd-info: #0891b2;
+    --pd-info-hover: #0e7490;
+    --pd-info-suave: rgba(8, 145, 178, 0.16);
+
+    --pd-neutro: #334155;
+    --pd-neutro-hover: #475569;
+
+    /* Sombra e overlays */
+    --pd-sombra: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --pd-sombra-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --pd-backdrop: rgba(2, 6, 23, 0.72);
+
+    /* Controles nativos (input date/time) */
+    --pd-color-scheme: dark;
+    --pd-picker-filter: invert(0.7);
+}
+
+/* =========================================================
+   TEMA CLARO
+   ========================================================= */
+.pd-tema-claro,
+.bi-layout-claro {
+    /* Superficies */
+    --pd-bg: #f1f5f9;
+    --pd-surface: #ffffff;
+    --pd-surface-2: #f8fafc;
+    --pd-surface-3: #f1f5f9;
+
+    /* Bordas */
+    --pd-border: #e2e8f0;
+    --pd-border-forte: #cbd5e1;
+
+    /* Texto */
+    --pd-texto: #0f172a;
+    --pd-texto-suave: #475569;
+    --pd-texto-fraco: #94a3b8;
+
+    /* Cores de acao (mesmas matizes; botoes solidos usam texto branco) */
+    --pd-primario: #2563eb;
+    --pd-primario-hover: #1d4ed8;
+    --pd-primario-suave: rgba(37, 99, 235, 0.12);
+
+    --pd-sucesso: #16a34a;
+    --pd-sucesso-hover: #15803d;
+    --pd-sucesso-suave: rgba(22, 163, 74, 0.12);
+
+    --pd-perigo: #dc2626;
+    --pd-perigo-hover: #b91c1c;
+    --pd-perigo-suave: rgba(220, 38, 38, 0.10);
+
+    --pd-aviso: #d97706;
+    --pd-aviso-hover: #b45309;
+    --pd-aviso-suave: rgba(217, 119, 6, 0.12);
+
+    --pd-info: #0891b2;
+    --pd-info-hover: #0e7490;
+    --pd-info-suave: rgba(8, 145, 178, 0.12);
+
+    --pd-neutro: #475569;
+    --pd-neutro-hover: #334155;
+
+    /* Sombra e overlays */
+    --pd-sombra: 0 12px 28px rgba(15, 23, 42, 0.12);
+    --pd-sombra-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+    --pd-backdrop: rgba(15, 23, 42, 0.45);
+
+    /* Controles nativos (input date/time) */
+    --pd-color-scheme: light;
+    --pd-picker-filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --pd-transicao: 0ms;
+    }
+}
+
+/* Bloqueia o scroll de fundo enquanto um Modal estiver aberto.
+   Regra global porque atua no <body>, fora do escopo dos componentes. */
+body.pd-modal-aberto {
+    overflow: hidden;
+}

@@ -1,0 +1,114 @@
+@namespace DllTeste.Componentes
+
+<button type="@TipoHtml"
+        class="pd-botao @ClasseVariante @(Bloco ? "pd-botao--bloco" : "") @ClasseTamanho @Class"
+        disabled="@(Desabilitado || Carregando)"
+        aria-busy="@Carregando.ToString().ToLowerInvariant()"
+        @onclick="AoClicar"
+        @attributes="AtributosExtras">
+
+    @if (Carregando)
+    {
+        <span class="pd-botao__spinner" aria-hidden="true"></span>
+    }
+    else if (!string.IsNullOrWhiteSpace(Icone))
+    {
+        <i class="bi @Icone pd-botao__icone" aria-hidden="true"></i>
+    }
+
+    @if (ChildContent is not null)
+    {
+        <span class="pd-botao__texto">@ChildContent</span>
+    }
+    else if (!string.IsNullOrWhiteSpace(Texto))
+    {
+        <span class="pd-botao__texto">@Texto</span>
+    }
+</button>
+
+@code {
+    /// <summary>Texto exibido. Ignorado se ChildContent for informado.</summary>
+    [Parameter] public string? Texto { get; set; }
+
+    /// <summary>Conteudo customizado (tem prioridade sobre Texto).</summary>
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Classe do Bootstrap Icons, ex: "bi-save", "bi-trash".</summary>
+    [Parameter] public string? Icone { get; set; }
+
+    /// <summary>Variante visual.</summary>
+    [Parameter] public BotaoVariante Variante { get; set; } = BotaoVariante.Primario;
+
+    /// <summary>Tamanho: "sm", "md" (padrao) ou "lg".</summary>
+    [Parameter] public string Tamanho { get; set; } = "md";
+
+    /// <summary>Ocupa 100% da largura disponivel.</summary>
+    [Parameter] public bool Bloco { get; set; }
+
+    /// <summary>Desabilita o botao.</summary>
+    [Parameter] public bool Desabilitado { get; set; }
+
+    /// <summary>Exibe spinner e bloqueia o clique.</summary>
+    [Parameter] public bool Carregando { get; set; }
+
+    /// <summary>Tipo HTML do botao: "button" (padrao), "submit" ou "reset".</summary>
+    [Parameter] public string TipoHtml { get; set; } = "button";
+
+    /// <summary>Acao de clique.</summary>
+    [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>Classes CSS adicionais.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    /// <summary>Demais atributos HTML (title, data-*, etc).</summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AtributosExtras { get; set; }
+
+    private string ClasseTamanho => Tamanho switch
+    {
+        "sm" => "pd-botao--sm",
+        "lg" => "pd-botao--lg",
+        _ => "pd-botao--md"
+    };
+
+    private string ClasseVariante
+    {
+        get
+        {
+            switch (Variante)
+            {
+                case BotaoVariante.Primario:
+                    return "pd-botao--primario";
+                case BotaoVariante.Secundario:
+                    return "pd-botao--secundario";
+                case BotaoVariante.Sucesso:
+                    return "pd-botao--sucesso";
+                case BotaoVariante.Perigo:
+                    return "pd-botao--perigo";
+                case BotaoVariante.Aviso:
+                    return "pd-botao--aviso";
+                case BotaoVariante.Info:
+                    return "pd-botao--info";
+                case BotaoVariante.Neutro:
+                    return "pd-botao--neutro";
+                case BotaoVariante.Fantasma:
+                    return "pd-botao--fantasma";
+                default:
+                    return "pd-botao--primario";
+            }
+        }
+    }
+
+    private async Task AoClicar(MouseEventArgs args)
+    {
+        if (Desabilitado || Carregando)
+        {
+            return;
+        }
+
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync(args);
+        }
+    }
+}

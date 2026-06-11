@@ -1,0 +1,79 @@
+@namespace DllTeste.Componentes.Toasts
+@implements IDisposable
+@inject IToastService Toasts
+
+<div class="pd-toast-area" aria-live="polite" aria-atomic="false">
+    @foreach (var toast in Toasts.Mensagens)
+    {
+        <div class="pd-toast @ClasseTipo(toast.Tipo)" role="status" @key="toast.Id">
+            <i class="bi @IconeTipo(toast.Tipo) pd-toast__icone" aria-hidden="true"></i>
+
+            <div class="pd-toast__conteudo">
+                @if (!string.IsNullOrWhiteSpace(toast.Titulo))
+                {
+                    <div class="pd-toast__titulo">@toast.Titulo</div>
+                }
+                <div class="pd-toast__mensagem">@toast.Mensagem</div>
+            </div>
+
+            <button type="button"
+                    class="pd-toast__fechar"
+                    aria-label="Fechar"
+                    @onclick="() => Toasts.Remover(toast.Id)">
+                <i class="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Toasts.AoMudar += AoMudar;
+    }
+
+    private async void AoMudar()
+    {
+        // O timer de auto-dismiss dispara em outra thread; volta para a thread do circuito.
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string ClasseTipo(ToastTipo tipo)
+    {
+        switch (tipo)
+        {
+            case ToastTipo.Sucesso:
+                return "pd-toast--sucesso";
+            case ToastTipo.Erro:
+                return "pd-toast--erro";
+            case ToastTipo.Aviso:
+                return "pd-toast--aviso";
+            case ToastTipo.Info:
+                return "pd-toast--info";
+            default:
+                return "pd-toast--info";
+        }
+    }
+
+    private string IconeTipo(ToastTipo tipo)
+    {
+        switch (tipo)
+        {
+            case ToastTipo.Sucesso:
+                return "bi-check-circle-fill";
+            case ToastTipo.Erro:
+                return "bi-x-circle-fill";
+            case ToastTipo.Aviso:
+                return "bi-exclamation-triangle-fill";
+            case ToastTipo.Info:
+                return "bi-info-circle-fill";
+            default:
+                return "bi-info-circle-fill";
+        }
+    }
+
+    public void Dispose()
+    {
+        Toasts.AoMudar -= AoMudar;
+    }
+}

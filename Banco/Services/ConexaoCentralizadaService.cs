@@ -30,7 +30,7 @@ public sealed class ConexaoCentralizadaService
 
         try
         {
-            await using var connection = _connectionFactory.CriarConexao();
+            await using var connection = _connectionFactory.CriarConexao(ambiente);
             await connection.OpenAsync(cancellationToken);
 
             const string sql = """

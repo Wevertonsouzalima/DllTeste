@@ -26,6 +26,9 @@
     <Folder Include="Banco\ConexaoCentralizada\Enums\" />
     <Folder Include="Banco\ConexaoCentralizada\Services\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\css\padrao.css" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Update="wwwroot\css\dllteste-menu.css">

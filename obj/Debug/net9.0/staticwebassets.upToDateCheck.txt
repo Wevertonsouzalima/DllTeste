@@ -1,7 +1,7 @@
 wwwroot\background.png
-wwwroot\exampleJsInterop.js
-wwwroot\css\dllteste-menu.css
 wwwroot\css\dllteste-login.css
+wwwroot\css\dllteste-menu.css
+wwwroot\exampleJsInterop.js
+C:\Users\Weverton\source\repos\DllTeste\wwwroot\css\dllteste-login.css
 C:\Users\Weverton\source\repos\DllTeste\wwwroot\css\dllteste-menu.css
 C:\Users\Weverton\source\repos\DllTeste\wwwroot\exampleJsInterop.js
-C:\Users\Weverton\source\repos\DllTeste\wwwroot\css\dllteste-login.css

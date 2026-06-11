@@ -1,0 +1,435 @@
+@namespace DllTeste.Componentes.Dados
+@typeparam TItem
+@attribute [CascadingTypeParameter(nameof(TItem))]
+
+<CascadingValue Value="this" IsFixed="true">
+    @ColunasDef
+</CascadingValue>
+
+<div class="pd-tabela @Class">
+
+    @if (MostrarBusca)
+    {
+        <div class="pd-tabela__topo">
+            <div class="pd-tabela__busca">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input type="text"
+                       placeholder="@PlaceholderBusca"
+                       value="@_filtro"
+                       @oninput="AoFiltrar"
+                       aria-label="@PlaceholderBusca" />
+                @if (!string.IsNullOrEmpty(_filtro))
+                {
+                    <button type="button" class="pd-tabela__limpar" aria-label="Limpar busca" @onclick="LimparFiltro">
+                        <i class="bi bi-x-lg" aria-hidden="true"></i>
+                    </button>
+                }
+            </div>
+
+            @if (Selecionavel && _selecionados.Count > 0)
+            {
+                <div class="pd-tabela__contador">@_selecionados.Count selecionado(s)</div>
+            }
+        </div>
+    }
+
+    <div class="pd-tabela__scroll">
+        <table class="pd-tabela__tabela">
+            <thead>
+                <tr>
+                    @if (Selecionavel)
+                    {
+                        <th class="pd-tabela__col-sel">
+                            <input type="checkbox"
+                                   checked="@TodosSelecionados"
+                                   @onchange="AlternarTodos"
+                                   aria-label="Selecionar todos" />
+                        </th>
+                    }
+                    @foreach (var col in _colunas)
+                    {
+                        bool ordenavel = col.Ordenavel && col.Valor is not null;
+                        <th style="@(string.IsNullOrEmpty(col.Largura) ? null : $"width:{col.Largura}")"
+                            class="@(ordenavel ? "pd-tabela__ordenavel" : null)"
+                            @onclick="() => Ordenar(col)">
+                            <span class="pd-tabela__th-conteudo">
+                                <span>@col.Titulo</span>
+                                @if (ordenavel)
+                                {
+                                    <i class="bi @IconeOrdem(col) pd-tabela__seta" aria-hidden="true"></i>
+                                }
+                            </span>
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (_paginaItens.Count == 0)
+                {
+                    <tr>
+                        <td class="pd-tabela__vazio" colspan="@TotalColunas">
+                            <i class="bi bi-inbox" aria-hidden="true"></i>
+                            <span>@TextoVazio</span>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in _paginaItens)
+                    {
+                        <tr class="@(EstaSelecionado(item) ? "pd-tabela__linha--sel" : null)" @key="item">
+                            @if (Selecionavel)
+                            {
+                                <td class="pd-tabela__col-sel">
+                                    <input type="checkbox"
+                                           checked="@EstaSelecionado(item)"
+                                           @onchange="() => AlternarItem(item)"
+                                           aria-label="Selecionar linha" />
+                                </td>
+                            }
+                            @foreach (var col in _colunas)
+                            {
+                                <td class="@col.Classe">
+                                    @if (col.ChildContent is not null)
+                                    {
+                                        @col.ChildContent(item)
+                                    }
+                                    else
+                                    {
+                                        @col.Valor?.Invoke(item)
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (ItensPorPagina > 0 && _totalPaginas > 1)
+    {
+        <div class="pd-tabela__paginacao">
+            <span class="pd-tabela__pag-info">
+                @InicioFaixa–@FimFaixa de @_totalItens
+            </span>
+            <div class="pd-tabela__pag-controles">
+                <button type="button" class="pd-tabela__pag-btn"
+                        disabled="@(_paginaAtual <= 1)"
+                        aria-label="Pagina anterior"
+                        @onclick="PaginaAnterior">
+                    <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                </button>
+                <span class="pd-tabela__pag-num">@_paginaAtual / @_totalPaginas</span>
+                <button type="button" class="pd-tabela__pag-btn"
+                        disabled="@(_paginaAtual >= _totalPaginas)"
+                        aria-label="Proxima pagina"
+                        @onclick="ProximaPagina">
+                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private readonly List<Coluna<TItem>> _colunas = new();
+    private readonly HashSet<TItem> _selecionados = new();
+
+    private List<TItem> _itensProcessados = new();
+    private List<TItem> _paginaItens = new();
+
+    private string _filtro = string.Empty;
+    private Coluna<TItem>? _colunaOrdenada;
+    private OrdemColuna _ordem = OrdemColuna.Nenhuma;
+
+    private int _paginaAtual = 1;
+    private int _totalPaginas = 1;
+    private int _totalItens;
+
+    /// <summary>Define as colunas (coloque componentes &lt;Coluna&gt; aqui).</summary>
+    [Parameter] public RenderFragment? ColunasDef { get; set; }
+
+    /// <summary>Fonte de dados.</summary>
+    [Parameter] public IEnumerable<TItem>? Itens { get; set; }
+
+    /// <summary>Exibe o campo de busca com filtro em tempo real.</summary>
+    [Parameter] public bool MostrarBusca { get; set; } = true;
+
+    /// <summary>Placeholder do campo de busca.</summary>
+    [Parameter] public string PlaceholderBusca { get; set; } = "Buscar...";
+
+    /// <summary>Habilita seleção de linhas via checkbox.</summary>
+    [Parameter] public bool Selecionavel { get; set; }
+
+    /// <summary>Notifica mudanças na seleção.</summary>
+    [Parameter] public EventCallback<IReadOnlyList<TItem>> OnSelecaoMudou { get; set; }
+
+    /// <summary>Itens por página. Use 0 para desativar a paginação.</summary>
+    [Parameter] public int ItensPorPagina { get; set; } = 10;
+
+    /// <summary>Texto exibido quando não há registros.</summary>
+    [Parameter] public string TextoVazio { get; set; } = "Nenhum registro encontrado.";
+
+    /// <summary>Classes CSS adicionais.</summary>
+    [Parameter] public string? Class { get; set; }
+
+    private int TotalColunas => _colunas.Count + (Selecionavel ? 1 : 0);
+    private int InicioFaixa => _totalItens == 0 ? 0 : ((_paginaAtual - 1) * ItensPorPagina) + 1;
+    private int FimFaixa => Math.Min(_paginaAtual * ItensPorPagina, _totalItens);
+
+    private bool TodosSelecionados =>
+        _itensProcessados.Count > 0 && _itensProcessados.All(_selecionados.Contains);
+
+    internal void RegistrarColuna(Coluna<TItem> coluna)
+    {
+        if (!_colunas.Contains(coluna))
+        {
+            _colunas.Add(coluna);
+            StateHasChanged();
+        }
+    }
+
+    internal void RemoverColuna(Coluna<TItem> coluna)
+    {
+        if (_colunas.Remove(coluna))
+        {
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        Recalcular();
+    }
+
+    private void Recalcular()
+    {
+        var fonte = Itens?.ToList() ?? new List<TItem>();
+
+        // Filtro em tempo real: busca o texto em todas as colunas com Valor.
+        if (!string.IsNullOrWhiteSpace(_filtro))
+        {
+            var termo = _filtro.Trim();
+            fonte = fonte.Where(item => CorrespondeFiltro(item, termo)).ToList();
+        }
+
+        // Ordenacao.
+        if (_colunaOrdenada?.Valor is not null && _ordem != OrdemColuna.Nenhuma)
+        {
+            var seletor = _colunaOrdenada.Valor;
+            switch (_ordem)
+            {
+                case OrdemColuna.Crescente:
+                    fonte = fonte.OrderBy(seletor, ComparadorValor.Instancia).ToList();
+                    break;
+                case OrdemColuna.Decrescente:
+                    fonte = fonte.OrderByDescending(seletor, ComparadorValor.Instancia).ToList();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        _itensProcessados = fonte;
+        _totalItens = fonte.Count;
+
+        // Paginacao.
+        if (ItensPorPagina > 0)
+        {
+            _totalPaginas = Math.Max(1, (int)Math.Ceiling(_totalItens / (double)ItensPorPagina));
+            if (_paginaAtual > _totalPaginas)
+            {
+                _paginaAtual = _totalPaginas;
+            }
+            if (_paginaAtual < 1)
+            {
+                _paginaAtual = 1;
+            }
+
+            _paginaItens = fonte
+                .Skip((_paginaAtual - 1) * ItensPorPagina)
+                .Take(ItensPorPagina)
+                .ToList();
+        }
+        else
+        {
+            _totalPaginas = 1;
+            _paginaAtual = 1;
+            _paginaItens = fonte;
+        }
+    }
+
+    private bool CorrespondeFiltro(TItem item, string termo)
+    {
+        foreach (var col in _colunas)
+        {
+            if (col.Valor is null)
+            {
+                continue;
+            }
+
+            var valor = col.Valor(item)?.ToString();
+            if (!string.IsNullOrEmpty(valor) &&
+                valor.Contains(termo, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void AoFiltrar(ChangeEventArgs e)
+    {
+        _filtro = e.Value?.ToString() ?? string.Empty;
+        _paginaAtual = 1;
+        Recalcular();
+    }
+
+    private void LimparFiltro()
+    {
+        _filtro = string.Empty;
+        _paginaAtual = 1;
+        Recalcular();
+    }
+
+    private void Ordenar(Coluna<TItem> coluna)
+    {
+        if (!coluna.Ordenavel || coluna.Valor is null)
+        {
+            return;
+        }
+
+        if (_colunaOrdenada == coluna)
+        {
+            switch (_ordem)
+            {
+                case OrdemColuna.Nenhuma:
+                    _ordem = OrdemColuna.Crescente;
+                    break;
+                case OrdemColuna.Crescente:
+                    _ordem = OrdemColuna.Decrescente;
+                    break;
+                case OrdemColuna.Decrescente:
+                    _ordem = OrdemColuna.Nenhuma;
+                    _colunaOrdenada = null;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            _colunaOrdenada = coluna;
+            _ordem = OrdemColuna.Crescente;
+        }
+
+        Recalcular();
+    }
+
+    private string IconeOrdem(Coluna<TItem> coluna)
+    {
+        if (_colunaOrdenada != coluna)
+        {
+            return "bi-arrow-down-up pd-tabela__seta--neutra";
+        }
+
+        switch (_ordem)
+        {
+            case OrdemColuna.Crescente:
+                return "bi-sort-down-alt";
+            case OrdemColuna.Decrescente:
+                return "bi-sort-up-alt";
+            default:
+                return "bi-arrow-down-up pd-tabela__seta--neutra";
+        }
+    }
+
+    private void PaginaAnterior()
+    {
+        if (_paginaAtual > 1)
+        {
+            _paginaAtual--;
+            Recalcular();
+        }
+    }
+
+    private void ProximaPagina()
+    {
+        if (_paginaAtual < _totalPaginas)
+        {
+            _paginaAtual++;
+            Recalcular();
+        }
+    }
+
+    private bool EstaSelecionado(TItem item) => _selecionados.Contains(item);
+
+    private async Task AlternarItem(TItem item)
+    {
+        if (!_selecionados.Add(item))
+        {
+            _selecionados.Remove(item);
+        }
+
+        await NotificarSelecao();
+    }
+
+    private async Task AlternarTodos()
+    {
+        if (TodosSelecionados)
+        {
+            foreach (var item in _itensProcessados)
+            {
+                _selecionados.Remove(item);
+            }
+        }
+        else
+        {
+            foreach (var item in _itensProcessados)
+            {
+                _selecionados.Add(item);
+            }
+        }
+
+        await NotificarSelecao();
+    }
+
+    private async Task NotificarSelecao()
+    {
+        if (OnSelecaoMudou.HasDelegate)
+        {
+            await OnSelecaoMudou.InvokeAsync(_selecionados.ToList());
+        }
+    }
+
+    /// <summary>Comparador que ordena valores boxed de forma segura.</summary>
+    private sealed class ComparadorValor : IComparer<object?>
+    {
+        public static readonly ComparadorValor Instancia = new();
+
+        public int Compare(object? x, object? y)
+        {
+            if (x is null && y is null)
+            {
+                return 0;
+            }
+            if (x is null)
+            {
+                return -1;
+            }
+            if (y is null)
+            {
+                return 1;
+            }
+
+            if (x is IComparable comparavel && x.GetType() == y.GetType())
+            {
+                return comparavel.CompareTo(y);
+            }
+
+            return string.Compare(x.ToString(), y.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+    }
+}

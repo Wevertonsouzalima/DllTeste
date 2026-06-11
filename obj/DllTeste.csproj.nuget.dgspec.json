@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj": {}
+    "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj": {
+    "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+        "projectUniqueName": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
         "projectName": "DllTeste",
-        "projectPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\DllTeste.csproj",
+        "projectPath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\DllTeste.csproj",
         "packagesPath": "C:\\Users\\Weverton\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\obj\\",
+        "outputPath": "C:\\Users\\Weverton\\Documents\\GitHub\\DllTeste\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
