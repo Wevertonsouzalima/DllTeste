@@ -8,6 +8,7 @@ build_property.ProjectTypeGuids =
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EntryPointFilePath = 
 build_property._SupportedPlatformList = Linux,macOS,Windows,browser
 build_property.RootNamespace = DllTeste
 build_property.RootNamespace = DllTeste
@@ -77,6 +78,10 @@ build_metadata.AdditionalFiles.CssScope = b-5nqt4od3x4
 [C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Modal.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcTW9kYWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-knl7j1uhje
+
+[C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Tabela/BzGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcVGFiZWxhXEJ6R3JpZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-jkcg9ze46l
 
 [C:/Users/Weverton/Documents/GitHub/DllTeste/Componentes/Toasts/ToastContainer.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcVG9hc3RzXFRvYXN0Q29udGFpbmVyLnJhem9y

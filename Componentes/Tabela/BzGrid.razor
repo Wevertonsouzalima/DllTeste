@@ -1,0 +1,448 @@
+﻿@typeparam TItem
+@namespace Componentes
+@attribute [CascadingTypeParameter(nameof(TItem))]
+@implements IDisposable
+@using DllTeste.Componentes.Tabela
+
+@* Coleta as colunas declaradas como markup filho *@
+<CascadingValue Value="this" IsFixed="true">
+    @ChildContent
+</CascadingValue>
+
+<div class="bz-grid @TamanhoClasse @(Bordas ? "bz-grid--bordas" : "")" @attributes="AdditionalAttributes">
+
+    @if (MostrarBusca || MostrarSeletorPagina || ToolbarContent != null)
+    {
+        <div class="bz-grid__toolbar">
+            <div class="bz-grid__toolbar-esq">
+                @if (MostrarSeletorPagina && _paginar)
+                {
+                    <label class="bz-grid__seletor">
+                        <span>Exibir</span>
+                        <select class="bz-grid__select" value="@ItensPorPagina" @onchange="OnItensPorPaginaChange">
+                            @foreach (var opc in OpcoesItensPorPagina)
+                            {
+                                <option value="@opc">@opc</option>
+                            }
+                        </select>
+                        <span>por página</span>
+                    </label>
+                }
+                @ToolbarContent
+            </div>
+
+            @if (MostrarBusca)
+            {
+                <div class="bz-grid__busca">
+                    <input type="text" class="bz-grid__input" placeholder="@PlaceholderBusca"
+                           value="@_filtro" @oninput="OnFiltroChange" />
+                </div>
+            }
+        </div>
+    }
+
+    <div class="bz-grid__scroll">
+        <table class="bz-grid__table @(Listrado ? "is-listrado" : "") @(Hover ? "is-hover" : "")">
+            <thead>
+                <tr>
+                    @if (Selecionavel)
+                    {
+                        <th class="bz-grid__col-sel">
+                            <input type="checkbox" class="bz-grid__check"
+                                   checked="@_todosFiltradosSelecionados"
+                                   @onchange="ToggleTodos" />
+                        </th>
+                    }
+                    @foreach (var coluna in _colunas)
+                    {
+                        <th class="@coluna.CssClasse @AlinhamentoClasse(coluna.Alinhamento) @(PodeOrdenar(coluna) ? "bz-grid__th--ordenavel" : "")"
+                            style="@LarguraStyle(coluna.Largura)"
+                            aria-sort="@AriaSort(coluna)"
+                            @onclick="() => OrdenarPor(coluna)">
+                            <span class="bz-grid__th-conteudo">
+                                @if (!string.IsNullOrEmpty(coluna.Icone))
+                                {
+                                    <i class="@coluna.Icone"></i>
+                                }
+                                <span>@coluna.Titulo</span>
+                                <span class="bz-grid__ordem-icone">@IconeOrdenacao(coluna)</span>
+                            </span>
+                        </th>
+                    }
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Carregando)
+                {
+                    <tr>
+                        <td colspan="@ColSpan" class="bz-grid__estado-td">
+                            @if (LoadingContent != null)
+                            {
+                                @LoadingContent
+                            }
+                            else
+                            {
+
+                                <div class="bz-grid__estado"><span class="bz-grid__spinner"></span> Carregando...</div>
+                            }
+                        </td>
+                    </tr>
+                }
+                else if (_itensPagina.Count == 0)
+                {
+                    <tr>
+                        <td colspan="@ColSpan" class="bz-grid__estado-td">
+                            @if (EmptyContent != null)
+                            {
+                                @EmptyContent
+                            }
+                            else
+                            {
+
+                                <div class="bz-grid__estado bz-grid__estado--vazio">@TextoVazio</div>
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in _itensPagina)
+                    {
+                        var chave = ObterChave(item);
+                        <tr @key="chave" class="@(EstaSelecionado(item) ? "is-selecionada" : "")">
+                            @if (Selecionavel)
+                            {
+                                <td class="bz-grid__col-sel">
+                                    <input type="checkbox" class="bz-grid__check"
+                                           checked="@EstaSelecionado(item)"
+                                           @onchange="() => ToggleItem(item)" />
+                                </td>
+                            }
+                            @foreach (var coluna in _colunas)
+                            {
+                                <td class="@coluna.CssClasse @AlinhamentoClasse(coluna.Alinhamento)" style="@LarguraStyle(coluna.Largura)">
+                                    @if (coluna is BzColunaAcoes<TItem> acoes)
+                                    {
+                                        @acoes.ChildContent?.Invoke(item)
+                                    }
+                                    else if (coluna is BzColunaImagem<TItem> img)
+                                    {
+                                        <div class="bz-grid__img-wrap" style="width:@img.LarguraImagem;height:@img.AlturaImagem;border-radius:@img.Raio;">
+                                            <img class="bz-grid__img" src="@img.ResolverUrl(item)" alt="@coluna.Titulo"
+                                                 loading="lazy" style="object-fit:@img.ObjectFit;border-radius:@img.Raio;"
+                                                 onerror="this.onerror=null;this.src='@img.Fallback'" />
+                                        </div>
+                                    }
+                                    else if (coluna is BzColuna<TItem> dados)
+                                    {
+                                        @if (dados.Template != null)
+                                        {
+                                            @dados.Template(item)
+                                        }
+                                        else
+                                        {
+                                            @dados.TextoFormatado(item)
+                                        }
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (_paginar && !Carregando && _totalFiltrado > 0)
+    {
+        <div class="bz-grid__rodape">
+            <div class="bz-grid__info">
+                Exibindo @InicioExibicao–@FimExibicao de @_totalFiltrado
+                @if (_totalFiltrado != Itens.Count)
+                {
+                    <span class="bz-grid__info-filtrado">(filtrados de @Itens.Count)</span>
+                }
+                @if (Selecionavel && _selecionadosVisiveis > 0)
+                {
+                    <span class="bz-grid__info-sel">· @_selecionadosVisiveis selecionado(s)</span>
+                }
+            </div>
+
+            @if (TotalPaginas > 1)
+            {
+                <nav class="bz-grid__paginacao" aria-label="Paginação">
+                    <button type="button" class="bz-grid__pag-btn" disabled="@(_pagina == 1)" @onclick="() => TrocarPagina(_pagina - 1)">Anterior</button>
+                    @foreach (var p in PaginasVisiveis())
+                    {
+                        if (p == -1)
+                        {
+                            <span class="bz-grid__pag-ellipsis">…</span>
+                        }
+                        else
+                        {
+                            <button type="button" class="bz-grid__pag-btn @(_pagina == p ? "is-ativo" : "")" @onclick="() => TrocarPagina(p)">@p</button>
+                        }
+                    }
+                    <button type="button" class="bz-grid__pag-btn" disabled="@(_pagina == TotalPaginas)" @onclick="() => TrocarPagina(_pagina + 1)">Próximo</button>
+                </nav>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    // ---- Limites de segurança (independem da configuração) ----
+    private const int LIMITE_FORCA_PAGINACAO = 500;   // acima disso, pagina mesmo se desligado
+    private const int LIMITE_ITENS_POR_PAGINA = 200;  // teto de linhas renderizadas por página
+
+    // ---- Parâmetros ----
+    [Parameter] public IReadOnlyList<TItem> Itens { get; set; } = new List<TItem>();
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public bool Carregando { get; set; }
+    [Parameter] public BzTamanho Tamanho { get; set; } = BzTamanho.Md;
+    [Parameter] public bool Listrado { get; set; } = true;
+    [Parameter] public bool Hover { get; set; } = true;
+    [Parameter] public bool Bordas { get; set; } = true;
+
+    [Parameter] public bool MostrarBusca { get; set; } = true;
+    [Parameter] public bool MostrarPaginacao { get; set; } = true;
+    [Parameter] public bool MostrarSeletorPagina { get; set; } = true;
+
+    [Parameter] public int ItensPorPaginaPadrao { get; set; } = 10;
+    [Parameter] public int[] OpcoesItensPorPagina { get; set; } = { 10, 20, 50, 100 };
+
+    [Parameter] public string PlaceholderBusca { get; set; } = "Pesquisar...";
+    [Parameter] public string TextoVazio { get; set; } = "Nenhum registro encontrado.";
+
+    [Parameter] public RenderFragment? ToolbarContent { get; set; }
+    [Parameter] public RenderFragment? LoadingContent { get; set; }
+    [Parameter] public RenderFragment? EmptyContent { get; set; }
+
+    // ---- Seleção ----
+    [Parameter] public bool Selecionavel { get; set; }
+    [Parameter] public Func<TItem, object>? ChaveItem { get; set; }
+    [Parameter] public List<TItem> Selecionados { get; set; } = new();
+    [Parameter] public EventCallback<List<TItem>> SelecionadosChanged { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    // ---- Estado interno ----
+    private readonly List<BzColunaBase<TItem>> _colunas = new();
+    private readonly HashSet<object> _chaves = new();
+
+    private string _filtro = string.Empty;
+    private int _pagina = 1;
+    private int ItensPorPagina { get; set; }
+    private BzColunaBase<TItem>? _colunaOrdenada;
+    private bool _ordemCrescente = true;
+
+    private List<TItem> _itensFiltrados = new();
+    private List<TItem> _itensPagina = new();
+    private int _totalFiltrado;
+    private int _selecionadosVisiveis;
+    private bool _paginar;
+    private System.Timers.Timer? _filtroTimer;
+
+    // ---- Registro de colunas (markup filho) ----
+    internal void AddColuna(BzColunaBase<TItem> coluna)
+    {
+        if (_colunas.Contains(coluna)) return;
+        _colunas.Add(coluna);
+        InvokeAsync(StateHasChanged);
+    }
+
+    internal void RemoveColuna(BzColunaBase<TItem> coluna)
+    {
+        if (_colunas.Remove(coluna)) InvokeAsync(StateHasChanged);
+    }
+
+    protected override void OnInitialized() => ItensPorPagina = ItensPorPaginaPadrao;
+
+    protected override void OnParametersSet() => Processar();
+
+    // ---- Pipeline ----
+    private void Processar()
+    {
+        _paginar = MostrarPaginacao || Itens.Count > LIMITE_FORCA_PAGINACAO;
+
+        IEnumerable<TItem> query = Itens;
+
+        if (!string.IsNullOrWhiteSpace(_filtro))
+        {
+            query = query.Where(item =>
+                _colunas.Any(col => col.Pesquisavel &&
+                    col.ObterTextoBusca(item).Contains(_filtro, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        _itensFiltrados = query.ToList();
+        _totalFiltrado = _itensFiltrados.Count;
+
+        var ordenacao = _colunaOrdenada?.ChaveOrdenacao;
+        if (ordenacao != null)
+        {
+            _itensFiltrados = _ordemCrescente
+                ? _itensFiltrados.OrderBy(ordenacao).ToList()
+                : _itensFiltrados.OrderByDescending(ordenacao).ToList();
+        }
+
+        if (Selecionavel && ChaveItem != null)
+        {
+            var chavesAtuais = Itens.Select(i => ChaveItem(i)).ToHashSet();
+            _chaves.RemoveWhere(k => !chavesAtuais.Contains(k));
+        }
+
+        var porPagina = _paginar ? Math.Clamp(ItensPorPagina, 1, LIMITE_ITENS_POR_PAGINA) : _totalFiltrado;
+        var totalPaginas = Math.Max(1, (int)Math.Ceiling(_totalFiltrado / (double)Math.Max(1, porPagina)));
+        _pagina = Math.Clamp(_pagina, 1, totalPaginas);
+
+        _itensPagina = _paginar
+            ? _itensFiltrados.Skip((_pagina - 1) * porPagina).Take(porPagina).ToList()
+            : _itensFiltrados;
+
+        _selecionadosVisiveis = Selecionavel ? _itensFiltrados.Count(EstaSelecionado) : 0;
+    }
+
+    // ---- Eventos ----
+    private void OnFiltroChange(ChangeEventArgs e)
+    {
+        var valor = e.Value?.ToString() ?? string.Empty;
+        _filtroTimer?.Stop();
+        _filtroTimer?.Dispose();
+        _filtroTimer = new System.Timers.Timer(300) { AutoReset = false };
+        _filtroTimer.Elapsed += (_, __) => InvokeAsync(() =>
+        {
+            _filtro = valor;
+            _pagina = 1;
+            Processar();
+            EmitirSelecionados();
+            StateHasChanged();
+        });
+        _filtroTimer.Start();
+    }
+
+    private void OnItensPorPaginaChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var v))
+        {
+            ItensPorPagina = v;
+            _pagina = 1;
+            Processar();
+        }
+    }
+
+    private void OrdenarPor(BzColunaBase<TItem> coluna)
+    {
+        if (!PodeOrdenar(coluna)) return;
+        if (coluna != _colunaOrdenada) { _colunaOrdenada = coluna; _ordemCrescente = true; }
+        else { _ordemCrescente = !_ordemCrescente; }
+        _pagina = 1;
+        Processar();
+    }
+
+    private void TrocarPagina(int nova)
+    {
+        if (nova < 1 || nova > TotalPaginas) return;
+        _pagina = nova;
+        Processar();
+    }
+
+    // ---- Seleção ----
+    private object ObterChave(TItem item) => ChaveItem?.Invoke(item) ?? item!;
+    private bool EstaSelecionado(TItem item) => ChaveItem != null && _chaves.Contains(ChaveItem(item));
+
+    private bool _todosFiltradosSelecionados =>
+        _itensFiltrados.Count > 0 && _itensFiltrados.All(EstaSelecionado);
+
+    private void ToggleItem(TItem item)
+    {
+        if (ChaveItem == null) return;
+        var chave = ChaveItem(item);
+        if (!_chaves.Add(chave)) _chaves.Remove(chave);
+        _selecionadosVisiveis = _itensFiltrados.Count(EstaSelecionado);
+        EmitirSelecionados();
+    }
+
+    private void ToggleTodos()
+    {
+        if (ChaveItem == null) return;
+        if (_todosFiltradosSelecionados)
+        {
+            foreach (var i in _itensFiltrados) _chaves.Remove(ChaveItem(i));
+        }
+        else
+        {
+            foreach (var i in _itensFiltrados) _chaves.Add(ChaveItem(i));
+        }
+        _selecionadosVisiveis = _itensFiltrados.Count(EstaSelecionado);
+        EmitirSelecionados();
+    }
+
+    private void EmitirSelecionados()
+    {
+        var efetivos = _itensFiltrados.Where(EstaSelecionado).ToList();
+        Selecionados = efetivos;
+        SelecionadosChanged.InvokeAsync(efetivos);
+    }
+
+    // ---- Cálculos de exibição ----
+    private int ColSpan => _colunas.Count + (Selecionavel ? 1 : 0);
+    private int PorPaginaEfetivo => _paginar ? Math.Clamp(ItensPorPagina, 1, LIMITE_ITENS_POR_PAGINA) : Math.Max(1, _totalFiltrado);
+    private int TotalPaginas => Math.Max(1, (int)Math.Ceiling(_totalFiltrado / (double)PorPaginaEfetivo));
+    private int InicioExibicao => _totalFiltrado == 0 ? 0 : (_pagina - 1) * PorPaginaEfetivo + 1;
+    private int FimExibicao => Math.Min(_pagina * PorPaginaEfetivo, _totalFiltrado);
+
+    private bool PodeOrdenar(BzColunaBase<TItem> coluna) => coluna.Ordenavel && coluna.ChaveOrdenacao != null;
+
+    private List<int> PaginasVisiveis()
+    {
+        const int max = 5;
+        var paginas = new List<int>();
+        var total = TotalPaginas;
+        if (total <= max + 4) { paginas.AddRange(Enumerable.Range(1, total)); }
+        else
+        {
+            paginas.Add(1);
+            if (_pagina > max) paginas.Add(-1);
+            int start = Math.Max(2, _pagina - 2);
+            int end = Math.Min(total - 1, _pagina + 2);
+            for (int i = start; i <= end; i++) paginas.Add(i);
+            if (_pagina < total - 2) paginas.Add(-1);
+            paginas.Add(total);
+        }
+        return paginas;
+    }
+
+    private string TamanhoClasse => Tamanho switch
+    {
+        BzTamanho.Sm => "bz-grid--sm",
+        BzTamanho.Lg => "bz-grid--lg",
+        _ => "bz-grid--md"
+    };
+
+    private string AlinhamentoClasse(BzAlinhamento a)
+    {
+        switch (a)
+        {
+            case BzAlinhamento.Centro:
+                return "is-centro";
+            case BzAlinhamento.Direita:
+                return "is-direita";
+            default:
+                return "is-esquerda";
+        }
+    }
+
+    private string LarguraStyle(string? largura) => $"width:{largura ?? "auto"};min-width:50px;";
+    private string IconeOrdenacao(BzColunaBase<TItem> c) => c != _colunaOrdenada ? "" : _ordemCrescente ? "▲" : "▼";
+    private string AriaSort(BzColunaBase<TItem> c) => c != _colunaOrdenada ? "none" : _ordemCrescente ? "ascending" : "descending";
+
+    public void Dispose()
+    {
+        _filtroTimer?.Stop();
+        _filtroTimer?.Dispose();
+        _filtroTimer = null;
+    }
+}
