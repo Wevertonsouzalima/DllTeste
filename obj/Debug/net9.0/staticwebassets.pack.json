@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\DllTeste.bundle.scp.css",
+      "PackagePath": "staticwebassets\\DllTeste.m3b08g6fgj.bundle.scp.css"
+    },
+    {
       "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\background.png",
       "PackagePath": "staticwebassets\\background.png"
     },
@@ -11,6 +15,10 @@
     {
       "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\css\\dllteste-menu.css",
       "PackagePath": "staticwebassets\\css\\dllteste-menu.css"
+    },
+    {
+      "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\css\\padrao.css",
+      "PackagePath": "staticwebassets\\css\\padrao.css"
     },
     {
       "Id": "C:\\Users\\Weverton\\source\\repos\\DllTeste\\wwwroot\\exampleJsInterop.js",

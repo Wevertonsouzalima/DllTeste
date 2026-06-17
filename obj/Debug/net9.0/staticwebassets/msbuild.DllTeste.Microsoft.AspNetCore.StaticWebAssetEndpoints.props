@@ -36,6 +36,30 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-gADeFoDFCfa3I/XyBtn0W/Fdgm9wIYtXtIROb2dYs9w="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"12866"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gADeFoDFCfa3I/XyBtn0W/Fdgm9wIYtXtIROb2dYs9w=\u0022"},{"Name":"Last-Modified","Value":"Sun, 03 May 2026 04:37:26 GMT"},{"Name":"Vary","Value":"Accept-Encoding"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DllTeste/css/padrao.cmd9w7e7ed.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\padrao.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"cmd9w7e7ed"},{"Name":"integrity","Value":"sha256-zBYyZaAs3CHQecyU1KEWJ5p0lNK05FaHw38Hp/ubuPk="},{"Name":"label","Value":"_content/DllTeste/css/padrao.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4090"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022zBYyZaAs3CHQecyU1KEWJ5p0lNK05FaHw38Hp/ubuPk=\u0022"},{"Name":"Last-Modified","Value":"Thu, 11 Jun 2026 01:55:55 GMT"},{"Name":"Vary","Value":"Accept-Encoding"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DllTeste/css/padrao.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\padrao.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-zBYyZaAs3CHQecyU1KEWJ5p0lNK05FaHw38Hp/ubuPk="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"4090"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022zBYyZaAs3CHQecyU1KEWJ5p0lNK05FaHw38Hp/ubuPk=\u0022"},{"Name":"Last-Modified","Value":"Thu, 11 Jun 2026 01:55:55 GMT"},{"Name":"Vary","Value":"Accept-Encoding"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DllTeste/DllTeste.bundle.scp.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DllTeste.m3b08g6fgj.bundle.scp.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-zl\u002B83GadUWvdkur\u002BhXzdnWmwLwnvRnlruzjZSB5thVE="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"37008"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022zl\u002B83GadUWvdkur\u002BhXzdnWmwLwnvRnlruzjZSB5thVE=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Jun 2026 02:42:22 GMT"},{"Name":"Vary","Value":"Accept-Encoding"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DllTeste/DllTeste.m3b08g6fgj.bundle.scp.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DllTeste.m3b08g6fgj.bundle.scp.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"m3b08g6fgj"},{"Name":"integrity","Value":"sha256-zl\u002B83GadUWvdkur\u002BhXzdnWmwLwnvRnlruzjZSB5thVE="},{"Name":"label","Value":"_content/DllTeste/DllTeste.bundle.scp.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"37008"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022zl\u002B83GadUWvdkur\u002BhXzdnWmwLwnvRnlruzjZSB5thVE=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Jun 2026 02:42:22 GMT"},{"Name":"Vary","Value":"Accept-Encoding"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DllTeste/exampleJsInterop.4dlbr4ud2t.js">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\exampleJsInterop.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

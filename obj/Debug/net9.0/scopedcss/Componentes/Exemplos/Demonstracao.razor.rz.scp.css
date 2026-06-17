@@ -1,0 +1,67 @@
+.demo[b-5nqt4od3x4] {
+    min-height: 100vh;
+    background-color: var(--pd-bg);
+    color: var(--pd-texto);
+    padding: 1.5rem;
+    transition: background-color var(--pd-transicao), color var(--pd-transicao);
+}
+
+.demo__topo[b-5nqt4od3x4] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.demo__h1[b-5nqt4od3x4] {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--pd-texto);
+}
+
+.demo__bloco[b-5nqt4od3x4] {
+    margin-bottom: 1.25rem;
+}
+
+.demo__linha[b-5nqt4od3x4] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.demo__linha + .demo__linha[b-5nqt4od3x4] {
+    margin-top: 0.75rem;
+}
+
+.demo__grade[b-5nqt4od3x4] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.demo__rotulo[b-5nqt4od3x4] {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--pd-texto-suave);
+    margin-bottom: 0.35rem;
+}
+
+.demo__num[b-5nqt4od3x4] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.demo__badge[b-5nqt4od3x4] {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.12rem 0.5rem;
+    border-radius: 999px;
+    background-color: var(--pd-surface-3);
+    color: var(--pd-texto-suave);
+}
